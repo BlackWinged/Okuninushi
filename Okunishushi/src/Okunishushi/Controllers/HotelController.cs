@@ -15,5 +15,10 @@ namespace Okunishushi.Controllers
         {
             return View();
         }
+
+        public IActionResult About1()
+        {
+            return View();
+        }
     }
 }

@@ -66,6 +66,8 @@ namespace Okunishushi
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute( "inno", "innoHostel", new {controller = "Hotel", action="index", id="" }
+                    );
             });
         }
     }
