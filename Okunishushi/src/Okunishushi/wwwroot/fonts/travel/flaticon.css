@@ -1,0 +1,73 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 05/01/2017 14:43
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("Flaticon.eot");
+  src: url("Flaticond41d.eot?#iefix") format("embedded-opentype"),
+       url("Flaticon.woff") format("woff"),
+       url("Flaticon.ttf") format("truetype"),
+       url("Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+}
+
+.flaticon-anchor:before { content: "\f100"; }
+.flaticon-backpack:before { content: "\f101"; }
+.flaticon-bike:before { content: "\f102"; }
+.flaticon-building:before { content: "\f103"; }
+.flaticon-bus:before { content: "\f104"; }
+.flaticon-button:before { content: "\f105"; }
+.flaticon-circus-camel:before { content: "\f106"; }
+.flaticon-cityscape:before { content: "\f107"; }
+.flaticon-deer:before { content: "\f108"; }
+.flaticon-desert:before { content: "\f109"; }
+.flaticon-ice-crystal:before { content: "\f10a"; }
+.flaticon-jeep:before { content: "\f10b"; }
+.flaticon-jungle:before { content: "\f10c"; }
+.flaticon-metro:before { content: "\f10d"; }
+.flaticon-mountain:before { content: "\f10e"; }
+.flaticon-mountain-1:before { content: "\f10f"; }
+.flaticon-mountains:before { content: "\f110"; }
+.flaticon-oars:before { content: "\f111"; }
+.flaticon-oxygen-tank:before { content: "\f112"; }
+.flaticon-palm-tree:before { content: "\f113"; }
+.flaticon-pine:before { content: "\f114"; }
+.flaticon-raindrop:before { content: "\f115"; }
+.flaticon-road:before { content: "\f116"; }
+.flaticon-rudder:before { content: "\f117"; }
+.flaticon-safari:before { content: "\f118"; }
+.flaticon-skateboard:before { content: "\f119"; }
+.flaticon-sleigh:before { content: "\f11a"; }
+.flaticon-sports:before { content: "\f11b"; }
+.flaticon-sports-1:before { content: "\f11c"; }
+.flaticon-target:before { content: "\f11d"; }
+.flaticon-technology:before { content: "\f11e"; }
+.flaticon-transport:before { content: "\f11f"; }
+.flaticon-transport-1:before { content: "\f120"; }
+.flaticon-transport-2:before { content: "\f121"; }
+.flaticon-travel:before { content: "\f122"; }
+.flaticon-travel-1:before { content: "\f123"; }
+.flaticon-travel-2:before { content: "\f124"; }
+.flaticon-travel-3:before { content: "\f125"; }
+.flaticon-travel-4:before { content: "\f126"; }
+.flaticon-travel-5:before { content: "\f127"; }
+.flaticon-travel-6:before { content: "\f128"; }
+.flaticon-travel-7:before { content: "\f129"; }
+.flaticon-yachting:before { content: "\f12a"; }

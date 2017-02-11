@@ -5,63 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Okunishushi</title>
 
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/css/owl.carousel.css" />
+    <link rel="stylesheet" href="lib/css/magnific-popup.css" />
+    <link rel="stylesheet" href="lib/css/font-awesome.css" />
+    <link rel="stylesheet" href="lib/css/style.css" />
+    <link rel="stylesheet" href="lib/css/responsive.css" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/Template/icon/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/Template/icon/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/Template/icon/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/Template/icon/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/icon/Template/apple-touch-icon-57-precomposed.png">
+
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Okunishushi</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
+
+    <!-- PRELOADER -->
+    <div id="st-preloader">
+        <div id="pre-status">
+            <div class="preload-placeholder"></div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - Okunishushi</p>
-        </footer>
+    <!-- /PRELOADER -->
+
+    <!-- HEADER -->
+    <header id="header">
+        <nav class="navbar st-navbar navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#st-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="logo" href="index.html"><img src="images/Template/logo.png" alt=""></a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="st-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#header">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#our-works">Works</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#our-team">Team</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container -->
+        </nav>
+    </header>
+    <!-- /HEADER -->
+
+    @RenderBody()
+
+    <!-- FOOTER -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <!-- SOCIAL ICONS -->
+                <div class="col-sm-6 col-sm-push-6 footer-social-icons">
+                    <span>Follow us:</span>
+                    <a href=""><i class="fa fa-facebook"></i></a>
+                    <a href=""><i class="fa fa-twitter"></i></a>
+                    <a href=""><i class="fa fa-google-plus"></i></a>
+                    <a href=""><i class="fa fa-pinterest-p"></i></a>
+                </div>
+                <!-- /SOCIAL ICONS -->
+                <div class="col-sm-6 col-sm-pull-6 copyright">
+                    <p>&copy; @DateTime.Now.Year.ToString() <a href="">Okuninushi</a>. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /FOOTER -->
+    <!-- Scroll-up -->
+    <div class="scroll-up">
+        <ul><li><a href="#header"><i class="fa fa-angle-up"></i></a></li></ul>
     </div>
 
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+
+    <!-- JS -->
+    <script type="text/javascript" src="lib/js/jquery.min.js"></script><!-- jQuery -->
+    <script type="text/javascript" src="lib/js/bootstrap.min.js"></script><!-- Bootstrap -->
+    <script type="text/javascript" src="lib/js/jquery.parallax.js"></script><!-- Parallax -->
+    <script type="text/javascript" src="lib/js/smoothscroll.js"></script><!-- Smooth Scroll -->
+    <script type="text/javascript" src="lib/js/masonry.pkgd.min.js"></script><!-- masonry -->
+    <script type="text/javascript" src="lib/js/jquery.fitvids.js"></script><!-- fitvids -->
+    <script type="text/javascript" src="lib/js/owl.carousel.min.js"></script><!-- Owl-Carousel -->
+    <script type="text/javascript" src="lib/js/jquery.counterup.min.js"></script><!-- CounterUp -->
+    <script type="text/javascript" src="lib/js/waypoints.min.js"></script><!-- CounterUp -->
+    <script type="text/javascript" src="lib/js/jquery.isotope.min.js"></script><!-- isotope -->
+    <script type="text/javascript" src="lib/js/jquery.magnific-popup.min.js"></script><!-- magnific-popup -->
+    <script type="text/javascript" src="lib/js/scripts.js"></script><!-- Scripts -->
+
+
+
+
 
     @RenderSection("scripts", required: false)
 </body>

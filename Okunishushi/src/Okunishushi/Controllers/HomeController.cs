@@ -10,6 +10,7 @@ namespace Okunishushi.Controllers
     {
         public IActionResult Index()
         {
+            
             return View();
         }
 
