@@ -14,7 +14,7 @@ namespace Okunishushi
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://okuninushi1-valarukar.c9users.io:8080")
+                //.UseUrls("http://okuninushi1-valarukar.c9users.io:8080")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
