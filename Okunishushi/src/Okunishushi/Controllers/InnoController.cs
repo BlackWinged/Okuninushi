@@ -34,6 +34,22 @@ namespace Okunishushi.Controllers
         {
             return View();
         }
-
+        public IActionResult Blogonecol()
+        {
+            return View();
+        }
+        public IActionResult Blogsidebar()
+        {
+            return View();
+        }
+        public IActionResult Blogsinglecol()
+        {
+            return View();
+        }
+        public IActionResult Blogsingleside()
+        {
+            return View();
+        }
+      
     }
 }
