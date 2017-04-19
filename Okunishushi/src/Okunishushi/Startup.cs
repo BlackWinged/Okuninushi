@@ -45,8 +45,6 @@ namespace Okunishushi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseApplicationInsightsRequestTelemetry();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,8 +55,6 @@ namespace Okunishushi
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseApplicationInsightsExceptionTelemetry();
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -66,8 +62,7 @@ namespace Okunishushi
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute( "inno", "innoHostel", new {controller = "Hotel", action="index", id="" }
-                    );
+                routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index"});
             });
         }
     }
