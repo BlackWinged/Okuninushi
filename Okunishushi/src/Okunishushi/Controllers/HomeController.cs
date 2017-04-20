@@ -10,7 +10,7 @@ namespace Okunishushi.Controllers
     {
         public IActionResult Index()
         {
-            Response.Redirect("inno");
+            Response.Redirect("classroom");
             return View();
         }
 

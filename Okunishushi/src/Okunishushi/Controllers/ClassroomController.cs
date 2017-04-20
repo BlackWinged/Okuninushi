@@ -54,20 +54,67 @@ namespace Okunishushi.Controllers
         }
 
         [HttpGet]
-        public IActionResult NewUser()
+        public IActionResult NewRole(int? id)
         {
-            return View();
+            if (id != null)
+            {
+                using (var db = new UserContext())
+                {
+                    return View(db.Roles.Single(r => r.Id == id));
+                }
+            }
+            return View(new Role());
         }
 
         [HttpPost]
-        public IActionResult NewUserSave()
+        public IActionResult NewRoleSave(int? id)
         {
-            User user = new User();
-            user.Username = Request.Form["username"];
-            user.email = Request.Form["email"];
+            Role role = new Role();
             using (var db = new UserContext())
             {
-                db.Users.Add(user);
+                if (id != null)
+                {
+                    role = db.Roles.Single(r => r.Id == id);
+                }
+                else
+                {
+                    db.Roles.Add(role);
+                }
+                role.Name = Request.Form["role_name"];
+                role.Description = Request.Form["description"];
+                db.SaveChanges();
+            }
+            return Redirect("roles");
+        }
+
+        [HttpGet]
+        public IActionResult NewUser(int? id)
+        {
+            if (id != null)
+            {
+                using (var db = new UserContext())
+                {
+                    return View(db.Users.Single(r => r.Id == id));
+                }
+            }
+            return View(new User());
+        }
+
+        [HttpPost]
+        public IActionResult NewUserSave(int? id)
+        {
+            User user = new User();
+            using (var db = new UserContext())
+            {
+                if (id != null)
+                {
+                    user = db.Users.Single(r => r.Id == id);
+                } else
+                {
+                    db.Users.Add(user);
+                }
+                user.Username = Request.Form["username"];
+                user.email = Request.Form["email"];
                 db.SaveChanges();
             }
             return Redirect("users");
