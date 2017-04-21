@@ -25,6 +25,8 @@ namespace Okunishushi.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("Slug");
+
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
@@ -35,9 +37,25 @@ namespace Okunishushi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Address");
+
+                    b.Property<string>("City");
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Firstname");
+
+                    b.Property<string>("Lestname");
+
+                    b.Property<string>("Schoolname");
+
                     b.Property<string>("Username");
 
-                    b.Property<string>("email");
+                    b.Property<string>("Zipcode");
 
                     b.HasKey("Id");
 
@@ -46,18 +64,15 @@ namespace Okunishushi.Migrations
 
             modelBuilder.Entity("Okunishushi.Models.UserRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("UserId");
 
                     b.Property<int>("RoleId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("Id");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
                 });

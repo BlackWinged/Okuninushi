@@ -8,8 +8,8 @@ using Okunishushi.Models;
 namespace Okunishushi.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20170420162752_add-role-description")]
-    partial class addroledescription
+    [Migration("20170421195634_db-recreate")]
+    partial class dbrecreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,8 @@ namespace Okunishushi.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("Slug");
+
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
@@ -36,9 +38,25 @@ namespace Okunishushi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Address");
+
+                    b.Property<string>("City");
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Firstname");
+
+                    b.Property<string>("Lestname");
+
+                    b.Property<string>("Schoolname");
+
                     b.Property<string>("Username");
 
-                    b.Property<string>("email");
+                    b.Property<string>("Zipcode");
 
                     b.HasKey("Id");
 
@@ -47,18 +65,15 @@ namespace Okunishushi.Migrations
 
             modelBuilder.Entity("Okunishushi.Models.UserRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("UserId");
 
                     b.Property<int>("RoleId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("Id");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
                 });
@@ -72,7 +87,7 @@ namespace Okunishushi.Migrations
 
                     b.HasOne("Okunishushi.Models.User", "User")
                         .WithMany("UserRole")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

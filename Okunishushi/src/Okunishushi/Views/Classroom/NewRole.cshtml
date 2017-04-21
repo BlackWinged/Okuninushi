@@ -8,32 +8,53 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="header">
-                    <h4 class="title">Edit Role</h4>
+                <div class="card-header" data-background-color="purple">
+                    <h4 class="title">Edit Profile</h4>
+                    <p class="category">Complete your profile</p>
                 </div>
-                <div class="content">
-                    <form method="post" action="newrolesave">
+                <div class="card-content">
+                    <form method="post" action="/classroom/newrolesave">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" name="role_name" class="form-control" placeholder="Role name" value="@Model.Name">
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Role Name</label>
+                                    <input type="text" class="form-control" name="role_name">
                                 </div>
                             </div>
-                        </div>
+                          </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea rows="5"  name="description" class="form-control" placeholder="Describe the role" value="@Model.Description"></textarea>
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> Type up your description, pretty please?</label>
+                                        <textarea class="form-control" name="description" rows="5"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-info btn-fill pull-right">Add Role</button>
+                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
                         <div class="clearfix"></div>
                     </form>
                 </div>
             </div>
         </div>
+        @*<div class="col-md-4">
+                <div class="card card-profile">
+                    <div class="card-avatar">
+                        <a href="#pablo">
+                            <img class="img" src="../assets/img/faces/marc.jpg" />
+                        </a>
+                    </div>
+                    <div class="content">
+                        <h6 class="category text-gray">CEO / Co-Founder</h6>
+                        <h4 class="card-title">Alec Thompson</h4>
+                        <p class="card-content">
+                            Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                        </p>
+                        <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
+                    </div>
+                </div>
+            </div>*@
     </div>
 </div>

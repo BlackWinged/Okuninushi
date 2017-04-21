@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Okunishushi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Okunishushi.Controllers
 {
@@ -38,7 +39,12 @@ namespace Okunishushi.Controllers
             List<User> allUsers = new List<Models.User>();
             using (var db = new UserContext())
             {
-                allUsers = db.Users.ToList<User>();
+                allUsers = db.Users.Include(u=>u.UserRole)
+                    .ToList<User>();
+                allUsers.ForEach(
+                    u => u.UserRole.ForEach(
+                        ur => db.Entry(ur)
+                        .Reference(r => r.Role).Load()));
             }
             return View(allUsers);
         }
@@ -90,6 +96,10 @@ namespace Okunishushi.Controllers
         [HttpGet]
         public IActionResult NewUser(int? id)
         {
+            using (var db = new UserContext())
+            {
+                ViewData["roles"] = db.Roles.ToList();  
+            }
             if (id != null)
             {
                 using (var db = new UserContext())
@@ -114,7 +124,21 @@ namespace Okunishushi.Controllers
                     db.Users.Add(user);
                 }
                 user.Username = Request.Form["username"];
-                user.email = Request.Form["email"];
+                user.Email = Request.Form["email"];
+                db.SaveChanges();
+                var roles = db.Roles;
+                foreach (string role in Request.Form["roles"].ToString().Split(','))
+                {
+                    roles.Where(r => r.Slug == role);
+                }
+                List<Role> resultRoles = roles.ToList();
+                foreach (Role role in resultRoles)
+                {
+                    UserRole userRole = new UserRole();
+                    userRole.User = user;
+                    userRole.Role = role;
+                    db.UserRoles.Add(userRole);
+                }
                 db.SaveChanges();
             }
             return Redirect("users");
