@@ -24,7 +24,7 @@
                             {
                                 <tr>
                                     <td>@user.Username</td>
-                                    <td>@(user.UserRole?.Count > 0 ? user.UserRole?.First().Role.Name:"" )</td>
+                                    <td>@(user.UserRole?.Count > 0 ? String.Join(", ", user.UserRole?.Select(x => x.Role.Name)): "")</td>
                                 </tr>
                             }
                         </tbody>

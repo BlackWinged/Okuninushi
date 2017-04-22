@@ -17,19 +17,14 @@
                     <table class="table">
                         <thead class="text-primary">
                         <th>Name</th>
-                        <th>Country</th>
-                        <th>City</th>
-                        <th>Salary</th>
+                        <th>Description</th>
                         </thead>
                         <tbody>
                             @foreach (Okunishushi.Models.Role role in Model)
                             {
                                 <tr>
-                                    <td>@role.Id</td>
                                     <td>@role.Name</td>
-                                    <td>$36,738</td>
-                                    <td>Niger</td>
-                                    <td>Oud-Turnhout</td>
+                                    <td>@role.Description</td>
                                 </tr>
                             }
                         </tbody>
