@@ -5,7 +5,6 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,8 +15,8 @@ namespace Okunishushi.Connectors
 {
     public class GoogleDriveConnector
     {
-        static string[] Scopes = { DriveService.Scope.Drive };
-        static string ApplicationName = "Drive API .NET Quickstart";
+        static string[] Scopes = { DriveService.Scope.DriveReadonly };
+        static string ApplicationName = "My Project";
 
         public static bool uploadFile(string filename, byte[] content, string folder)
         {
@@ -28,37 +27,24 @@ namespace Okunishushi.Connectors
 
         public static string listFiles()
         {
-            ServiceAccountCredential credential;
 
-            using (var stream =
-                new FileStream("clientsettings.json", FileMode.Open, FileAccess.Read))
-            {
-                string credPath = "/";
-                credPath = Path.Combine(credPath, ".credentials/drive-dotnet-quickstart.json");
-                credential = Serv
-                    
-                    GoogleWebAuthorizationBroker .AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "admin",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-                Console.WriteLine("Credential file saved to: " + credPath);
-            }
+            var credential = GoogleCredential.FromStream(new System.IO.FileStream("My Project-047741070e6c.json", System.IO.FileMode.Open, System.IO.FileAccess.Read))
+        .CreateScoped(Scopes);
 
             // Create Drive API service.
             var service = new DriveService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = cred    ential,
-                ApplicationName = ApplicationName,
+                HttpClientInitializer = credential,
+                ApplicationName = "My Project"
             });
-
             // Define parameters of request.
             FilesResource.ListRequest listRequest = service.Files.List();
             listRequest.PageSize = 10;
             listRequest.Fields = "nextPageToken, files(id, name)";
 
+            //var test = "";
             // List files.
+            createDirectory(service, "etst", "testy", null);
             IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute()
                 .Files;
             Console.WriteLine("Files:");
@@ -75,6 +61,28 @@ namespace Okunishushi.Connectors
             }
             Console.Read();
             return "";
+        }
+
+        public static Google.Apis.Drive.v3.Data.File createDirectory(DriveService _service, string _title, string _description, string _parent)
+        {
+            File NewDirectory = null;
+            // Create metaData for a new Directory File body = new File();
+            File body = new File();
+            body.Description = _description;
+            body.MimeType = "application/vnd.google-apps.folder";
+            try
+            {
+                FilesResource.CreateRequest request = _service.Files.Create(body);
+                NewDirectory = request.Execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: " + e.Message);
+            }
+            return NewDirectory;
+
+
+
         }
     }
 }

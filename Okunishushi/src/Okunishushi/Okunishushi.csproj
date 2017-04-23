@@ -106,4 +106,10 @@
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="My Project-047741070e6c.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
