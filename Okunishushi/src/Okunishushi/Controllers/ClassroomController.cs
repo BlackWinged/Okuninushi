@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Okunishushi.Models;
 using Microsoft.EntityFrameworkCore;
+using Okunishushi.Connectors;
 
 namespace Okunishushi.Controllers
 {
@@ -12,6 +13,7 @@ namespace Okunishushi.Controllers
     {
         public IActionResult Index()
         {
+            GoogleDriveConnector.listFiles();
             return View();
         }
 
