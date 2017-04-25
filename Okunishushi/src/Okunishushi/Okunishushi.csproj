@@ -107,8 +107,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="My Project-047741070e6c.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Update="clientsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

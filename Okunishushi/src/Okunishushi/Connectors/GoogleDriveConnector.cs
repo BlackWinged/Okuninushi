@@ -10,13 +10,31 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Google.Apis.Requests;
 
 namespace Okunishushi.Connectors
 {
     public class GoogleDriveConnector
     {
-        static string[] Scopes = { DriveService.Scope.DriveReadonly };
+        static string[] Scopes = { DriveService.Scope.Drive };
         static string ApplicationName = "My Project";
+        static DriveService service;
+
+        public static void setupService()
+        {
+            if (service == null)
+            {
+                var credential = GoogleCredential.FromStream(new System.IO.FileStream("clientsettings.json", System.IO.FileMode.Open, System.IO.FileAccess.Read)).CreateScoped(Scopes);
+                // Create Drive API service.
+                service = new DriveService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = "My Project"
+                });
+
+            }
+
+        }
 
         public static bool uploadFile(string filename, byte[] content, string folder)
         {
@@ -25,18 +43,9 @@ namespace Okunishushi.Connectors
             return result;
         }
 
-        public static string listFiles()
+        public static List<File> listFiles()
         {
-
-            var credential = GoogleCredential.FromStream(new System.IO.FileStream("My Project-047741070e6c.json", System.IO.FileMode.Open, System.IO.FileAccess.Read))
-        .CreateScoped(Scopes);
-
-            // Create Drive API service.
-            var service = new DriveService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "My Project"
-            });
+            setupService();
             // Define parameters of request.
             FilesResource.ListRequest listRequest = service.Files.List();
             listRequest.PageSize = 10;
@@ -44,30 +53,22 @@ namespace Okunishushi.Connectors
 
             //var test = "";
             // List files.
-            createDirectory(service, "etst", "testy", null);
-            IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute()
-                .Files;
-            Console.WriteLine("Files:");
-            if (files != null && files.Count > 0)
-            {
-                foreach (var file in files)
-                {
-                    Console.WriteLine("{0} ({1})", file.Name, file.Id);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No files found.");
-            }
-            Console.Read();
-            return "";
+            //createDirectory(service, "etst", "testy", null);
+            List<File> files = (List<File>)listRequest.Execute().Files;
+
+
+            //FilesResource.ListRequest listRequest2 = service.Permissions.
+
+            return files;
         }
 
-        public static Google.Apis.Drive.v3.Data.File createDirectory(DriveService _service, string _title, string _description, string _parent)
+        public static File createDirectory(DriveService _service, string _title, string _description, string _parent)
         {
+            setupService();
             File NewDirectory = null;
             // Create metaData for a new Directory File body = new File();
             File body = new File();
+            body.Name = _title;
             body.Description = _description;
             body.MimeType = "application/vnd.google-apps.folder";
             try
@@ -80,9 +81,41 @@ namespace Okunishushi.Connectors
                 Console.WriteLine("An error occurred: " + e.Message);
             }
             return NewDirectory;
+        }
 
+        public static void shareFolder(string email, File file)
+        {
+            setupService();
+            var batch = new BatchRequest(service);
 
+            BatchRequest.OnResponse<Permission> callback = delegate (Permission permission, RequestError error, int index, System.Net.Http.HttpResponseMessage message)
+            {
+                if (error != null)
+                {
+                    // Handle error
+                    Console.WriteLine(error.Message);
+                }
+                else
+                {
+                    Console.WriteLine("Permission ID: " + permission.Id);
+                }
+            };
 
+            //foreach (File f in files)
+            //{
+
+            //    Permission userPermission = new Permission()
+            //    {
+            //        Type = "user",
+            //        Role = "writer",
+            //        EmailAddress = "learnrooms@gmail.com"
+            //    };
+            //    var request = service.Permissions.Create(userPermission, f.Id);
+            //    request.Fields = "id";
+            //    batch.Queue(request, callback);
+            //}
+
+            var task = batch.ExecuteAsync();
         }
     }
 }
