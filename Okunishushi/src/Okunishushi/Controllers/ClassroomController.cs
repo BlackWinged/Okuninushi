@@ -13,7 +13,6 @@ namespace Okunishushi.Controllers
     {
         public IActionResult Index()
         {
-            GoogleDriveConnector.listFiles();
             return View();
         }
 

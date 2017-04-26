@@ -30,6 +30,36 @@ namespace Okunishushi.Models
                 .HasOne(bc => bc.Role)
                 .WithMany(c => c.UserRole)
                 .HasForeignKey(bc => bc.RoleId);
+
+
+
+            modelBuilder.Entity<StudentClassroms>()
+                .HasKey(ur => new { ur.StudentId, ur.ClassroomId });
+
+            modelBuilder.Entity<StudentClassroms>()
+                .HasOne(sc => sc.Classroom)
+                .WithMany(c => c.StudentClassrooms)
+                .HasForeignKey(bc => bc.ClassroomId);
+
+            modelBuilder.Entity<StudentClassroms>()
+                .HasOne(sc => sc.Student)
+                .WithMany(s => s.StudentClassrooms)
+                .HasForeignKey(sc => sc.StudentId);
+
+
+
+            modelBuilder.Entity<ClassroomDocuments>()
+                .HasKey(doc => new { doc.ClassroomId, doc.DocumentId });
+
+            modelBuilder.Entity<ClassroomDocuments>()
+                .HasOne(cd => cd.Classroom)
+                .WithMany(c => c.ClassroomDocuments)
+                .HasForeignKey(cd => cd.ClassroomId);
+
+            modelBuilder.Entity<ClassroomDocuments>()
+                .HasOne(cd => cd.Document)
+                .WithMany(d => d.ClassroomsDocuments)
+                .HasForeignKey(cd => cd.DocumentId);
         }
     }
     public class User
@@ -46,6 +76,7 @@ namespace Okunishushi.Models
         public string Zipcode { get; set; }
         public string Description { get; set; }
         public List<UserRole> UserRole { get; set; }
+        public List<StudentClassroms> StudentClassrooms { get; set; }
     }
 
     public class Role
@@ -53,12 +84,14 @@ namespace Okunishushi.Models
         public int Id { get; set; }
         public string Slug { get; set; }
         private string name { get; set; }
-        public string Name {
+        public string Name
+        {
             get
             {
                 return name;
             }
-            set {
+            set
+            {
                 name = value;
                 Slug = System.Net.WebUtility.UrlEncode(value);
             }
@@ -85,12 +118,38 @@ namespace Okunishushi.Models
 
         public int OwnerId { get; set; }
         public User Owner { get; set; }
+
+        public List<StudentClassroms> StudentClassrooms { get; set; }
+        public List<ClassroomDocuments> ClassroomDocuments { get; set; }
+    }
+
+    public class StudentClassroms
+    {
+        public int Id { get; set; }
+
+        public int StudentId { get; set; }
+        public User Student { get; set; }
+
+        public int ClassroomId { get; set; }
+        public Classroom Classroom { get; set; }
     }
 
     public class Document
     {
         public int Id { get; set; }
+        public string GoogleId { get; set; }
+        public string FileName { get; set; }
+        public List<ClassroomDocuments> ClassroomsDocuments { get; set; }
+    }
 
+    public class ClassroomDocuments
+    {
+        public int Id { get; set; }
 
+        public int ClassroomId { get; set; }
+        public Classroom Classroom { get; set; }
+
+        public int DocumentId { get; set; }
+        public Document Document { get; set; }
     }
 }
