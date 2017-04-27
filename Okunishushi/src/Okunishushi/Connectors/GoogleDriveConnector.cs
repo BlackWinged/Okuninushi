@@ -63,15 +63,28 @@ namespace Okunishushi.Connectors
             {
                 files.ForEach(x =>
                 {
-                    documents.Add(db.Documents.Single(d => d.GoogleId == x.Id));
+                    var doc = db.Documents.SingleOrDefault(d => d.GoogleId == x.Id);
+                    if (doc != null)
+                    {
+                        documents.Add(doc);
+                    }
+                    else
+                    {
+                        doc = new Document();
+                        doc.GoogleId = x.Id;
+                        doc.FileName = x.Name;
+                        documents.Add(doc);
+                        db.Documents.Add(doc);
+                    }
                 });
+                db.SaveChanges();
             }
             //FilesResource.ListRequest listRequest2 = service.Permissions.
 
             return documents;
         }
 
-        public static System.IO.MemoryStream downloadFile(string  id)
+        public static System.IO.MemoryStream downloadFile(string id)
         {
             setupService();
             // Define parameters of request.

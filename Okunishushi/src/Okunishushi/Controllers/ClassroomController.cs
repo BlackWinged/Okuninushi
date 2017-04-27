@@ -159,5 +159,19 @@ namespace Okunishushi.Controllers
             //return View(files);
             return View();
         }
+
+        public IActionResult DownloadFiles()
+        {
+            ////GET api/download/12345abc
+            //[HttpGet("{id}"]
+            //    public async Task<IActionResult> Download(string id)
+            //    {
+            //        var stream = await { { __get_stream_here__} }
+            //        var response = File(stream, "application/octet-stream"); // FileStreamResult
+            //        return response;
+            //    }  
+            //        return Response;
+            return null;
+        }
     }
 }

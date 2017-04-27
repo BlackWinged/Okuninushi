@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Documents";
     Layout = "_classroomLayout";
 }
-@model List<Okunishushi.Models.User>
+@model List<Okunishushi.Models.Document>
 
 <div class="container-fluid">
     <div class="row">
@@ -17,14 +17,14 @@
                     <table class="table">
                         <thead class="text-primary">
                         <th>Name</th>
-                        <th>Role</th>
+                        <th>Google ID</th>
                         </thead>
                         <tbody>
-                            @foreach (Okunishushi.Models.User user in Model)
+                            @foreach (Okunishushi.Models.Document doc in Model)
                             {
                                 <tr>
-                                    <td>@user.Username</td>
-                                    <td>@(user.UserRole?.Count > 0 ? String.Join(", ", user.UserRole?.Select(x => x.Role.Name)): "")</td>
+                                    <td>@doc.FileName</td>
+                                    <td>@doc.GoogleId</td>
                                 </tr>
                             }
                         </tbody>

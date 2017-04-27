@@ -27,8 +27,8 @@
                 Tip 2: you can also add an image using data-image tag
             -->
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text">
-                    Creative Tim
+                <a href="@Url.Action("index")" class="simple-text">
+                    Classrooms. TM, doh.
                 </a>
             </div>
             <div class="sidebar-wrapper">
@@ -51,14 +51,14 @@
                             <p>User roles</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="typography.html">
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                        <a href="@Url.Action("documents")">
                             <i class="material-icons">library_books</i>
-                            <p>Typography</p>
+                            <p>Documents</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="icons.html">
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                        <a href="@Url.Action("rooms")">
                             <i class="material-icons">bubble_chart</i>
                             <p>Icons</p>
                         </a>
@@ -137,7 +137,7 @@
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
-                        <ul>
+                        @*<ul>
                             <li>
                                 <a href="#">
                                     Home
@@ -158,11 +158,11 @@
                                     Blog
                                 </a>
                             </li>
-                        </ul>
+                        </ul>*@
                     </nav>
                     <p class="copyright pull-right">
                         &copy;
-                        <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                        <script>document.write(new Date().getFullYear())</script> Classrooms, by <a href="http://type-fly.com">Type-fly</a>
                     </p>
                 </div>
             </footer>
