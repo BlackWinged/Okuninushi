@@ -39,30 +39,41 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "users" ? "active" : "")">
-                        <a href="/classroom/users/">
-                            <i class="material-icons">person</i>
-                            <p>All users</p>
+                    <li>
+                        <a data-toggle="collapse" href="#pagesExamples">
+                            <i class="material-icons">image</i>
+                            <p>
+                                Admin
+                                <b class="caret"></b>
+                            </p>
                         </a>
+                        <div class="collapse" id="pagesExamples">
+                            <ul class="nav">
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "users" ? "active" : "")">
+                                    <a href="/classroom/users/">
+                                        All users
+                                    </a>
+                                </li>
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                                    <a href="/classroom/roles/">
+                                        User roles
+                                    </a>
+                                </li>
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                                    <a href="@Url.Action("documents")">
+                                        Documents
+                                    </a>
+                                </li>
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                                    <a href="@Url.Action("rooms")">
+                                        Icons
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
                     </li>
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
-                        <a href="/classroom/roles/">
-                            <i class="material-icons">content_paste</i>
-                            <p>User roles</p>
-                        </a>
-                    </li>
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
-                        <a href="@Url.Action("documents")">
-                            <i class="material-icons">library_books</i>
-                            <p>Documents</p>
-                        </a>
-                    </li>
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
-                        <a href="@Url.Action("rooms")">
-                            <i class="material-icons">bubble_chart</i>
-                            <p>Icons</p>
-                        </a>
-                    </li>
+
                     <li>
                         <a href="maps.html">
                             <i class="material-icons">location_on</i>
@@ -138,27 +149,27 @@
                 <div class="container-fluid">
                     <nav class="pull-left">
                         @*<ul>
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Blog
-                                </a>
-                            </li>
-                        </ul>*@
+                                <li>
+                                    <a href="#">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Company
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Portfolio
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Blog
+                                    </a>
+                                </li>
+                            </ul>*@
                     </nav>
                     <p class="copyright pull-right">
                         &copy;
@@ -210,16 +221,17 @@
 <!-- Material Dashboard javascript methods -->
 <script src="/assets/js/material-dashboard.js"></script>
 <script src="/assets/js/demo.js"></script>
-@if (Context.Request.Path.Value == "/classroom" || Context.Request.Path.Value == "/classroom/") {
-<script type="text/javascript">
-    	$(document).ready(function(){
+@if (Context.Request.Path.Value == "/classroom" || Context.Request.Path.Value == "/classroom/")
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-			// Javascript method's body can be found in assets/js/demos.js
+            // Javascript method's body can be found in assets/js/demos.js
             demo.initDashboardPageCharts();
             demo.initVectorMap();
 
-    });
-</script>
+        });
+    </script>
 }
 
 </html>
