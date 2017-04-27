@@ -7,7 +7,7 @@ using Okunishushi.Models;
 
 namespace Okunishushi.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(ClassroomContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

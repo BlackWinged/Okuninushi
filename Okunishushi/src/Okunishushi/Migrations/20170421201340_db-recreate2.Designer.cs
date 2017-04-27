@@ -7,7 +7,7 @@ using Okunishushi.Models;
 
 namespace Okunishushi.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(ClassroomContext))]
     [Migration("20170421201340_db-recreate2")]
     partial class dbrecreate2
     {

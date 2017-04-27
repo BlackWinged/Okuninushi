@@ -4,11 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Okunishushi.Models
 {
-    public class UserContext : DbContext
+    public class ClassroomContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<ClassroomDocuments > ClassroomDocuments { get; set; }
+        public DbSet<StudentClassroms> StudentClassrooms { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

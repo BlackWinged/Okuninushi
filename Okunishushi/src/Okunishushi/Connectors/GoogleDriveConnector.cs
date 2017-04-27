@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Requests;
+using Okunishushi.Models;
 
 namespace Okunishushi.Connectors
 {
@@ -43,7 +44,7 @@ namespace Okunishushi.Connectors
             return result;
         }
 
-        public static List<File> listFiles()
+        public static List<Document> listFiles()
         {
             setupService();
             // Define parameters of request.
@@ -56,10 +57,32 @@ namespace Okunishushi.Connectors
             //createDirectory(service, "etst", "testy", null);
             List<File> files = (List<File>)listRequest.Execute().Files;
 
+            List<Document> documents = new List<Document>();
 
+            using (var db = new ClassroomContext())
+            {
+                files.ForEach(x =>
+                {
+                    documents.Add(db.Documents.Single(d => d.GoogleId == x.Id));
+                });
+            }
             //FilesResource.ListRequest listRequest2 = service.Permissions.
 
-            return files;
+            return documents;
+        }
+
+        public static System.IO.MemoryStream downloadFile(string  id)
+        {
+            setupService();
+            // Define parameters of request.
+            FilesResource.GetRequest req = service.Files.Get(id);
+
+            //var test = "";
+            // List files.
+            //createDirectory(service, "etst", "testy", null);
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            req.Download(stream);
+            return stream;
         }
 
         public static File createDirectory(DriveService _service, string _title, string _description, string _parent)

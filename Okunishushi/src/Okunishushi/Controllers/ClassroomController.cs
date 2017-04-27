@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Okunishushi.Models;
 using Microsoft.EntityFrameworkCore;
+using Google.Apis.Drive.v3;
 using Okunishushi.Connectors;
+
 
 namespace Okunishushi.Controllers
 {
@@ -38,7 +40,7 @@ namespace Okunishushi.Controllers
         public IActionResult Users()
         {
             List<User> allUsers = new List<Models.User>();
-            using (var db = new UserContext())
+            using (var db = new ClassroomContext())
             {
                 allUsers = db.Users.Include(u=>u.UserRole)
                     .ToList<User>();
@@ -53,7 +55,7 @@ namespace Okunishushi.Controllers
         public IActionResult Roles()
         {
             List<Role> allRoles = new List<Models.Role>();
-            using (var db = new UserContext())
+            using (var db = new ClassroomContext())
             {
                 allRoles = db.Roles.ToList<Role>();
             }
@@ -65,7 +67,7 @@ namespace Okunishushi.Controllers
         {
             if (id != null)
             {
-                using (var db = new UserContext())
+                using (var db = new ClassroomContext())
                 {
                     return View(db.Roles.Single(r => r.Id == id));
                 }
@@ -77,7 +79,7 @@ namespace Okunishushi.Controllers
         public IActionResult NewRoleSave(int? id)
         {
             Role role = new Role();
-            using (var db = new UserContext())
+            using (var db = new ClassroomContext())
             {
                 if (id != null)
                 {
@@ -97,13 +99,13 @@ namespace Okunishushi.Controllers
         [HttpGet]
         public IActionResult NewUser(int? id)
         {
-            using (var db = new UserContext())
+            using (var db = new ClassroomContext())
             {
                 ViewData["roles"] = db.Roles.ToList();  
             }
             if (id != null)
             {
-                using (var db = new UserContext())
+                using (var db = new ClassroomContext())
                 {
                     return View(db.Users.Single(r => r.Id == id));
                 }
@@ -115,7 +117,7 @@ namespace Okunishushi.Controllers
         public IActionResult NewUserSave(int? id)
         {
             User user = new User();
-            using (var db = new UserContext())
+            using (var db = new ClassroomContext())
             {
                 if (id != null)
                 {
@@ -143,6 +145,19 @@ namespace Okunishushi.Controllers
                 db.SaveChanges();
             }
             return Redirect("users");
+        }
+
+        public IActionResult Documents()
+        {
+            List<Document> files = GoogleDriveConnector.listFiles();
+            return View(files);
+        }
+
+        public IActionResult uploadFiles()
+        {
+            //List<File> files = GoogleDriveConnector.listFiles();
+            //return View(files);
+            return View();
         }
     }
 }
