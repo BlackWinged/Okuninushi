@@ -20,12 +20,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar" data-color="purple" data-image="/assets/img/sidebar-1.jpg">
+        <div class="sidebar" data-active-color="rose" data-background-color="black" data-image="../assets/img/sidebar-1.jpg">
             <!--
-                Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
-
-                Tip 2: you can also add an image using data-image tag
-            -->
+            Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+            Tip 2: you can also add an image using data-image tag
+            Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+        -->
             <div class="logo">
                 <a href="@Url.Action("index")" class="simple-text">
                     Classrooms. TM, doh.
@@ -59,14 +59,14 @@
                                         User roles
                                     </a>
                                 </li>
-                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "documents" ? "active" : "")">
                                     <a href="@Url.Action("documents")">
                                         Documents
                                     </a>
                                 </li>
-                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "classrooms" ? "active" : "")">
                                     <a href="@Url.Action("rooms")">
-                                        Icons
+                                        Rooms
                                     </a>
                                 </li>
 
@@ -92,6 +92,12 @@
         <div class="main-panel">
             <nav class="navbar navbar-transparent navbar-absolute">
                 <div class="container-fluid">
+                    <div class="navbar-minimize">
+                        <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                            <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                            <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                        </button>
+                    </div>
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse">
                             <span class="sr-only">Toggle navigation</span>
@@ -205,7 +211,7 @@
 <!-- Sliders Plugin -->
 <script src="/assets/js/nouislider.min.js"></script>
 <!--  Google Maps Plugin    -->
-<script src="https://maps.googleapis.com/maps/api/js"></script>
+@*<script src="https://maps.googleapis.com/maps/api/js"></script>*@
 <!-- Select Plugin -->
 <script src="/assets/js/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin    -->

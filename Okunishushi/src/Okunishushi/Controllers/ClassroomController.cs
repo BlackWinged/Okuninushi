@@ -13,6 +13,7 @@ namespace Okunishushi.Controllers
 {
     public class ClassroomController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
@@ -42,7 +43,7 @@ namespace Okunishushi.Controllers
             List<User> allUsers = new List<Models.User>();
             using (var db = new ClassroomContext())
             {
-                allUsers = db.Users.Include(u=>u.UserRole)
+                allUsers = db.Users.Include(u => u.UserRole)
                     .ToList<User>();
                 allUsers.ForEach(
                     u => u.UserRole.ForEach(
@@ -101,7 +102,7 @@ namespace Okunishushi.Controllers
         {
             using (var db = new ClassroomContext())
             {
-                ViewData["roles"] = db.Roles.ToList();  
+                ViewData["roles"] = db.Roles.ToList();
             }
             if (id != null)
             {
@@ -122,7 +123,8 @@ namespace Okunishushi.Controllers
                 if (id != null)
                 {
                     user = db.Users.Single(r => r.Id == id);
-                } else
+                }
+                else
                 {
                     db.Users.Add(user);
                 }
