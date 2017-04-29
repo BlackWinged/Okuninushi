@@ -5551,7 +5551,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\API\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\css\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\images\" />

@@ -12,7 +12,7 @@ namespace Okunishushi.Models
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<ClassroomDocuments > ClassroomDocuments { get; set; }
-        public DbSet<StudentClassroms> StudentClassrooms { get; set; }
+        public DbSet<UserClassrooms> StudentClassrooms { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,18 +37,18 @@ namespace Okunishushi.Models
 
 
 
-            modelBuilder.Entity<StudentClassroms>()
-                .HasKey(ur => new { ur.StudentId, ur.ClassroomId });
+            modelBuilder.Entity<UserClassrooms>()
+                .HasKey(ur => new { ur.UserId, ur.ClassroomId });
 
-            modelBuilder.Entity<StudentClassroms>()
+            modelBuilder.Entity<UserClassrooms>()
                 .HasOne(sc => sc.Classroom)
                 .WithMany(c => c.StudentClassrooms)
                 .HasForeignKey(bc => bc.ClassroomId);
 
-            modelBuilder.Entity<StudentClassroms>()
-                .HasOne(sc => sc.Student)
+            modelBuilder.Entity<UserClassrooms>()
+                .HasOne(sc => sc.User)
                 .WithMany(s => s.StudentClassrooms)
-                .HasForeignKey(sc => sc.StudentId);
+                .HasForeignKey(sc => sc.UserId);
 
 
 
@@ -80,7 +80,7 @@ namespace Okunishushi.Models
         public string Zipcode { get; set; }
         public string Description { get; set; }
         public List<UserRole> UserRole { get; set; }
-        public List<StudentClassroms> StudentClassrooms { get; set; }
+        public List<UserClassrooms> StudentClassrooms { get; set; }
     }
 
     public class Role
@@ -123,16 +123,17 @@ namespace Okunishushi.Models
         public int OwnerId { get; set; }
         public User Owner { get; set; }
 
-        public List<StudentClassroms> StudentClassrooms { get; set; }
+        public List<UserClassrooms> StudentClassrooms { get; set; }
+        public List<UserClassrooms> TeacherClassrooms { get; set; }
         public List<ClassroomDocuments> ClassroomDocuments { get; set; }
     }
 
-    public class StudentClassroms
+    public class UserClassrooms
     {
         public int Id { get; set; }
 
-        public int StudentId { get; set; }
-        public User Student { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }
