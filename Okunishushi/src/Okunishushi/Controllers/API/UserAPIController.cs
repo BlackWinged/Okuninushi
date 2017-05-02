@@ -38,11 +38,16 @@ namespace Okunishushi.Controllers
             return View();
         }
 
-        public IActionResult Users()
+        public IActionResult Users(string slug)
         {
             List<User> allUsers = new List<Models.User>();
             using (var db = new ClassroomContext())
             {
+
+                if (!string.IsNullOrEmpty(slug))
+                {
+                    allUsers = db.Users.Where(u => (u.Firstname.Contains(slug) || u.Lestname.Contains(slug) || u.Schoolname.Contains(slug))).ToList<User>();
+                }
                 allUsers = db.Users.Include(u => u.UserRole)
                     .ToList<User>();
                 allUsers.ForEach(
