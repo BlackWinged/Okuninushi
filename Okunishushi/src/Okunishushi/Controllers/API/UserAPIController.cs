@@ -38,24 +38,44 @@ namespace Okunishushi.Controllers
             return View();
         }
 
-        public IActionResult Users(string slug)
+        public IActionResult Users()
         {
+            String search = Request.Query["search[value]"];
             List<User> allUsers = new List<Models.User>();
+            int recordsTotal = 0;
+            int recordsFiltered = 0;
             using (var db = new ClassroomContext())
             {
 
-                if (!string.IsNullOrEmpty(slug))
+                if (!string.IsNullOrEmpty(search))
                 {
-                    allUsers = db.Users.Where(u => (u.Firstname.Contains(slug) || u.Lestname.Contains(slug) || u.Schoolname.Contains(slug))).ToList<User>();
+                    allUsers = db.Users.Where(u => (u.Username.Contains(search) || u.Firstname.Contains(search) || u.Lestname.Contains(search) || u.Schoolname.Contains(search))).Include(u => u.UserRole).ToList<User>();
                 }
-                allUsers = db.Users.Include(u => u.UserRole)
-                    .ToList<User>();
+                else
+                {
+                    allUsers = db.Users.Include(u => u.UserRole)
+                        .ToList<User>();
+                }
                 allUsers.ForEach(
                     u => u.UserRole.ForEach(
                         ur => db.Entry(ur)
                         .Reference(r => r.Role).Load()));
+             recordsTotal = db.Users.Count();
+             recordsFiltered = db.Users.Count();
             }
-            return Json(allUsers);
+            var data = new List<Object>();
+
+            allUsers.ForEach(u =>
+            {
+                var user = new List<String>();
+                user.Add(u.Username);
+                user.Add(u.Address);
+                user.Add(u.City);
+
+                data.Add(user);
+            });
+
+            return Json(new { data, recordsTotal, recordsFiltered });
         }
 
     }

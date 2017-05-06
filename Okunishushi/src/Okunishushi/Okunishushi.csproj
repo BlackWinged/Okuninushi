@@ -5639,6 +5639,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Classroom\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\css\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\images\" />

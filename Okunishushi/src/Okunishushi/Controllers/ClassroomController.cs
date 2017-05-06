@@ -175,5 +175,10 @@ namespace Okunishushi.Controllers
             //        return Response;
             return null;
         }
+
+        public IActionResult NewClassroom()
+        {
+            return View();
+        }
     }
 }
