@@ -37,11 +37,16 @@ namespace Okunishushi
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc(options =>
+            services.AddMvc();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
             {
-                options.Filters.Add(new AuthFIlter());
-            }
-            );
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.CookieHttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +55,7 @@ namespace Okunishushi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseSession();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

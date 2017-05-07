@@ -7,10 +7,12 @@ using Okunishushi.Models;
 using Microsoft.EntityFrameworkCore;
 using Google.Apis.Drive.v3;
 using Okunishushi.Connectors;
+using Okunishushi.Filters;
 
 
 namespace Okunishushi.Controllers
 {
+    [AuthFilter]
     public class ClassroomController : Controller
     {
 
@@ -212,6 +214,18 @@ namespace Okunishushi.Controllers
             db.Classrooms.Add(newRoom);
             db.SaveChanges();
             return Redirect("newclassroom/"+ newRoom.Id); 
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ExecuteLogin()
+        {
+            return View();
         }
     }
 }

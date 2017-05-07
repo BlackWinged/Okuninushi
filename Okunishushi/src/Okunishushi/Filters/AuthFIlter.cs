@@ -3,17 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 
 namespace Okunishushi.Filters
 {
-    public class AuthFIlter : IAuthorizationFilter
+    public class AuthFilterAttribute : Attribute, IFilterFactory
     {
-        public void OnAuthorization(AuthorizationFilterContext context)
-        {
-            if (!context.HttpContext.Request.Path.Value.ToLower().Contains("classroom"))
-            {
-                context.HttpContext.Response.Redirect("classroom");
+        public bool IsReusable => false;
 
+        public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
+        {
+            return new InternalAuthFIlter();
+        }
+        private class InternalAuthFIlter : IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationFilterContext context)
+            {
+                if (context.HttpContext.Session.GetString("test") == null)
+                {
+
+                }
+                if (!context.HttpContext.Request.Path.Value.ToLower().Contains("login"))
+                {
+                    context.HttpContext.Response.Redirect("classroom/login");
+
+                }
             }
         }
     }
