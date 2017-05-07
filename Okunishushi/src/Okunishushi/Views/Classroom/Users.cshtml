@@ -8,12 +8,15 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header" data-background-color="purple">
-                    <a href="/classroom/newuser" class="btn btn-info btn-fill pull-right">Add New User</a>
-                    <h4 class="title">Simple Table</h4>
-                    <p class="category">Here is a subtitle for this table</p>
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
                 </div>
-                <div class="card-content table-responsive">
+                <div class="card-content">
+                    <h4 class="card-title">All students</h4>
+                        <a href="/classroom/newuser" class="btn btn-info btn-fill pull-right">Add New User</a>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
                     <table class="table">
                         <thead class="text-primary">
                         <th>Name</th>
@@ -23,8 +26,8 @@
                             @foreach (Okunishushi.Models.User user in Model)
                             {
                                 <tr>
-                                    <td>@user.Username</td>
-                                    <td>@(user.UserRole?.Count > 0 ? String.Join(", ", user.UserRole?.Select(x => x.Role.Name)): "")</td>
+                                    <td><a href="@Url.Action("newuser" , "classroom", new { id = user.Id.ToString() })"> @user.Username</a></td>
+                                    <td>@(user.UserRole?.Count > 0 ? String.Join(", ", user.UserRole?.Select(x => x.Role.Name)) : "")</td>
                                 </tr>
                             }
                         </tbody>

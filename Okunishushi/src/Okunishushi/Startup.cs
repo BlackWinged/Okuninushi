@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Okunishushi.Filters;
 
 namespace Okunishushi
 {
@@ -36,7 +37,11 @@ namespace Okunishushi
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthFIlter());
+            }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +59,6 @@ namespace Okunishushi
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -66,7 +70,7 @@ namespace Okunishushi
                     name: "apiroute",
                     template: "api/{controller=Home}/{action=Index}/{id?}"
                     );
-                routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index"});
+                routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index" });
             });
         }
     }

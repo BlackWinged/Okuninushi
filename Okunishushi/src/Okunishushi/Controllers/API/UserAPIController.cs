@@ -38,7 +38,7 @@ namespace Okunishushi.Controllers
             return View();
         }
 
-        public IActionResult Users()
+        public IActionResult Users(string role, int id)
         {
             String search = Request.Query["search[value]"];
             List<User> allUsers = new List<Models.User>();
@@ -49,7 +49,7 @@ namespace Okunishushi.Controllers
 
                 if (!string.IsNullOrEmpty(search))
                 {
-                    allUsers = db.Users.Where(u => (u.Username.Contains(search) || u.Firstname.Contains(search) || u.Lestname.Contains(search) || u.Schoolname.Contains(search))).Include(u => u.UserRole).ToList<User>();
+                    allUsers = db.Users.Where(u => (u.Username.Contains(search) || u.Firstname.Contains(search) || u.Lastname.Contains(search) || u.Schoolname.Contains(search))).Include(u => u.UserRole).ToList<User>();
                 }
                 else
                 {
@@ -60,8 +60,13 @@ namespace Okunishushi.Controllers
                     u => u.UserRole.ForEach(
                         ur => db.Entry(ur)
                         .Reference(r => r.Role).Load()));
+
+                if (!string.IsNullOrEmpty(role))
+                {
+                    allUsers.RemoveAll(u => u.UserRole.Where(ur => ur.Role.Slug.ToLower() == role).Count() == 0);
+                }
              recordsTotal = db.Users.Count();
-             recordsFiltered = db.Users.Count();
+             recordsFiltered = allUsers.Count();
             }
             var data = new List<Object>();
 

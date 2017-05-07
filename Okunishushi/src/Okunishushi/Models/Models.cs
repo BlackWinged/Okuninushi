@@ -73,7 +73,7 @@ namespace Okunishushi.Models
         public string Email { get; set; }
         public string Schoolname { get; set; }
         public string Firstname { get; set; }
-        public string Lestname { get; set; }
+        public string Lastname { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
@@ -123,6 +123,10 @@ namespace Okunishushi.Models
         public int OwnerId { get; set; }
         public User Owner { get; set; }
 
+        public string ClassName { get; set; }
+        public string Tags { get; set; }
+        public string Description { get; set; }
+
         public List<UserClassrooms> StudentClassrooms { get; set; }
         public List<UserClassrooms> TeacherClassrooms { get; set; }
         public List<ClassroomDocuments> ClassroomDocuments { get; set; }
@@ -144,6 +148,7 @@ namespace Okunishushi.Models
         public int Id { get; set; }
         public string GoogleId { get; set; }
         public string FileName { get; set; }
+        public string Tags { get; set; }
         public List<ClassroomDocuments> ClassroomsDocuments { get; set; }
     }
 

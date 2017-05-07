@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Classroom\**" />
+    <Content Remove="Controllers\Classroom\**" />
+    <EmbeddedResource Remove="Controllers\Classroom\**" />
+    <None Remove="Controllers\Classroom\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\assets\css\bootstrap.min.css" />
     <Content Include="wwwroot\assets\css\demo.css" />
     <Content Include="wwwroot\assets\css\material-dashboard.css" />
@@ -5621,6 +5628,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+    <PackageReference Include="vue" Version="2.2.6" />
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
@@ -5639,8 +5647,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Classroom\" />
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\css\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\images\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\js\" />

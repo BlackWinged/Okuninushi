@@ -108,7 +108,9 @@ namespace Okunishushi.Controllers
             {
                 using (var db = new ClassroomContext())
                 {
-                    return View(db.Users.Single(r => r.Id == id));
+                    var user = db.Users.Include(u => u.UserRole).Single(r => r.Id == id);
+                    user.UserRole.ForEach(u => db.Entry(u).Reference(ur => ur.Role).Load());
+                    return View(user);
                 }
             }
             return View(new User());
@@ -132,16 +134,20 @@ namespace Okunishushi.Controllers
                 user.Email = Request.Form["email"];
                 db.SaveChanges();
                 var roles = db.Roles;
-                foreach (string role in Request.Form["roles"].ToString().Split(','))
-                {
-                    roles.Where(r => r.Slug == role);
-                }
-                List<Role> resultRoles = roles.ToList();
+
+                List<string> roleCodes = new List<string>();
+                roleCodes.AddRange(Request.Form["roles"].ToString().Split(',').ToList());
+
+                List<Role> resultRoles = roles.Where(r => roleCodes.Where(x => x.ToLower() == r.Slug.ToLower()).Count() > 0).ToList();
+                List<UserRole> existingRoles = db.UserRoles.Where(ur => ur.UserId == user.Id).ToList();
+                db.UserRoles.RemoveRange(existingRoles);
+
                 foreach (Role role in resultRoles)
                 {
                     UserRole userRole = new UserRole();
                     userRole.User = user;
                     userRole.Role = role;
+
                     db.UserRoles.Add(userRole);
                 }
                 db.SaveChanges();
@@ -176,9 +182,36 @@ namespace Okunishushi.Controllers
             return null;
         }
 
-        public IActionResult NewClassroom()
+        public IActionResult ClassRooms()
         {
-            return View();
+            using (var db = new ClassroomContext())
+            {
+                return View(db.Classrooms.ToList());
+            }
+        }
+
+        public IActionResult NewClassroom(int id)
+        {
+            {
+                using (var db = new ClassroomContext())
+                {
+                    if (id != 0)
+                    {
+                        var classroom = db.Classrooms.Single(r => r.Id == id);
+                        return View(classroom);
+
+                    }
+                }
+            }
+            return View(new Classroom());
+        }
+
+        public IActionResult SaveNewClassroom(Classroom newRoom)
+        {
+            var db = new ClassroomContext();
+            db.Classrooms.Add(newRoom);
+            db.SaveChanges();
+            return Redirect("newclassroom/"+ newRoom.Id); 
         }
     }
 }

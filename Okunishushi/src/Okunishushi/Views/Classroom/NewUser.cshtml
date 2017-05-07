@@ -3,7 +3,7 @@
     ViewData["Title"] = "Users";
     Layout = "_classroomLayout";
 }
-
+@model  Okunishushi.Models.User
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
@@ -14,23 +14,24 @@
                 </div>
                 <div class="card-content">
                     <form method="post" action="/classroom/newusersave">
+                        <input type="hidden" name="id" id="id" value="@Model.Id" />
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="form-group label-floating">
                                     <label class="control-label">School Name</label>
-                                    <input type="text" class="form-control" name="schoolname">
+                                    <input type="text" class="form-control" name="schoolname" value="@Model.Schoolname">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Username</label>
-                                    <input type="text" class="form-control" name="username">
+                                    <input type="text" class="form-control" name="username" value="@Model.Username">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Email address</label>
-                                    <input type="email" class="form-control" name="email">
+                                    <input type="email" class="form-control" name="email" value="@Model.Email">
                                 </div>
                             </div>
                         </div>
@@ -78,23 +79,32 @@
                         </div>
                         @if (ViewData["roles"] != null)
                         {
-                        <label >Roles</label>
-                        <table class="table">
-                            <tbody>
-                                @foreach (Okunishushi.Models.Role role in (List<Okunishushi.Models.Role>)ViewData["roles"]) {
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" id="@role.Slug" name="roles" value="@role.Slug">
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>@role.Name  -  @role.Description</td>
-                                </tr>
-                                }
-                            </tbody>
-                        </table>
+                            <label>Roles</label>
+                            <table class="table">
+                                <tbody>
+                                    @foreach (Okunishushi.Models.Role role in (List<Okunishushi.Models.Role>)ViewData["roles"])
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        @{string isChecked = "";}
+                                                        @if (Model.UserRole != null)
+                                                        {
+                                                            @if (Model.UserRole.Where(ur => ur.Role.Slug == role.Slug).Count() > 0)
+                                                            {
+                                                                isChecked = "checked";
+                                                            }
+                                                        }
+                                                        <input type="checkbox" @isChecked id="@role.Slug" name="roles" value="@role.Slug">
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>@role.Name  -  @role.Description</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         }
                         <div class="row">
                             <div class="col-md-12">
@@ -114,21 +124,21 @@
             </div>
         </div>
         @*<div class="col-md-4">
-            <div class="card card-profile">
-                <div class="card-avatar">
-                    <a href="#pablo">
-                        <img class="img" src="../assets/img/faces/marc.jpg" />
-                    </a>
+                <div class="card card-profile">
+                    <div class="card-avatar">
+                        <a href="#pablo">
+                            <img class="img" src="../assets/img/faces/marc.jpg" />
+                        </a>
+                    </div>
+                    <div class="content">
+                        <h6 class="category text-gray">CEO / Co-Founder</h6>
+                        <h4 class="card-title">Alec Thompson</h4>
+                        <p class="card-content">
+                            Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                        </p>
+                        <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
+                    </div>
                 </div>
-                <div class="content">
-                    <h6 class="category text-gray">CEO / Co-Founder</h6>
-                    <h4 class="card-title">Alec Thompson</h4>
-                    <p class="card-content">
-                        Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                    </p>
-                    <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
-                </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
 </div>

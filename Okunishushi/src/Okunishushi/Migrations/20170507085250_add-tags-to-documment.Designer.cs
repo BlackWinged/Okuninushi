@@ -8,9 +8,10 @@ using Okunishushi.Models;
 namespace Okunishushi.Migrations
 {
     [DbContext(typeof(ClassroomContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20170507085250_add-tags-to-documment")]
+    partial class addtagstodocumment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -21,13 +22,7 @@ namespace Okunishushi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClassName");
-
-                    b.Property<string>("Description");
-
                     b.Property<int>("OwnerId");
-
-                    b.Property<string>("Tags");
 
                     b.HasKey("Id");
 

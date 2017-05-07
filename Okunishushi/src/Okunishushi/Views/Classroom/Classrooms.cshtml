@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Classrooms ";
+    Layout = "_classroomLayout";
+}
+@model List<Okunishushi.Models.Classroom>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" data-background-color="purple">
+                    <a href="/classroom/newclassroom" class="btn btn-info btn-fill pull-right">Add New Room</a>
+                    <h4 class="title">Simple Table</h4>
+                    <p class="category">Here is a subtitle for this table</p>
+                </div>
+                <div class="card-content table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                        <th>Name</th>
+                        </thead>
+                        <tbody>
+                            @foreach (Okunishushi.Models.Classroom classroom in Model)
+                            {
+                                <tr>
+                                    <td><a href="@Url.Action("newclassroom" , "classroom", new { id = classroom.Id.ToString() })"> @classroom.ClassName</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
