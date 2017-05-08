@@ -11,7 +11,7 @@ namespace Okunishushi.Models
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Document> Documents { get; set; }
-        public DbSet<ClassroomDocuments > ClassroomDocuments { get; set; }
+        public DbSet<ClassroomDocuments> ClassroomDocuments { get; set; }
         public DbSet<UserClassrooms> StudentClassrooms { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
@@ -51,7 +51,6 @@ namespace Okunishushi.Models
                 .HasForeignKey(sc => sc.UserId);
 
 
-
             modelBuilder.Entity<ClassroomDocuments>()
                 .HasKey(doc => new { doc.ClassroomId, doc.DocumentId });
 
@@ -79,6 +78,7 @@ namespace Okunishushi.Models
         public string Country { get; set; }
         public string Zipcode { get; set; }
         public string Description { get; set; }
+        public string Password { get; set; }
         public List<UserRole> UserRole { get; set; }
         public List<UserClassrooms> StudentClassrooms { get; set; }
     }
@@ -128,7 +128,6 @@ namespace Okunishushi.Models
         public string Description { get; set; }
 
         public List<UserClassrooms> StudentClassrooms { get; set; }
-        public List<UserClassrooms> TeacherClassrooms { get; set; }
         public List<ClassroomDocuments> ClassroomDocuments { get; set; }
     }
 

@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Google.Apis.Drive.v3;
 using Okunishushi.Connectors;
 using Okunishushi.Filters;
-
+using Microsoft.AspNetCore.Http;
+using Okunishushi.Helpers;
 
 namespace Okunishushi.Controllers
 {
@@ -119,21 +120,22 @@ namespace Okunishushi.Controllers
         }
 
         [HttpPost]
-        public IActionResult NewUserSave(int? id)
+        public IActionResult NewUserSave(User user)
         {
-            User user = new User();
+            if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]))
+            {
+                return Redirect("classroom/newuser");
+            }
             using (var db = new ClassroomContext())
             {
-                if (id != null)
+                if (user.Id != 0)
                 {
-                    user = db.Users.Single(r => r.Id == id);
+                    user = db.Users.Single(r => r.Id == user.Id);
                 }
                 else
                 {
                     db.Users.Add(user);
                 }
-                user.Username = Request.Form["username"];
-                user.Email = Request.Form["email"];
                 db.SaveChanges();
                 var roles = db.Roles;
 
@@ -211,6 +213,7 @@ namespace Okunishushi.Controllers
         public IActionResult SaveNewClassroom(Classroom newRoom)
         {
             var db = new ClassroomContext();
+            newRoom.OwnerId = SecurityHelper.currentUserId(HttpContext.Session);
             db.Classrooms.Add(newRoom);
             db.SaveChanges();
             return Redirect("newclassroom/"+ newRoom.Id); 
@@ -223,9 +226,13 @@ namespace Okunishushi.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExecuteLogin()
+        public IActionResult ExecuteLogin(string username, string password)
         {
-            return View();
+            if (SecurityHelper.login(username, password, HttpContext.Session))
+            {
+                return Redirect("/classroom/");
+            }
+            return View("login");
         }
     }
 }

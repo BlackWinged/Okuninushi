@@ -38,7 +38,7 @@ namespace Okunishushi.Controllers
             return View();
         }
 
-        public IActionResult Users(string role, int id)
+        public IActionResult Users(string role, int id, bool adding = true)
         {
             String search = Request.Query["search[value]"];
             List<User> allUsers = new List<Models.User>();
@@ -53,7 +53,7 @@ namespace Okunishushi.Controllers
                 }
                 else
                 {
-                    allUsers = db.Users.Include(u => u.UserRole)
+                    allUsers = db.Users.Include(u => u.UserRole).Include(u=>u.StudentClassrooms)
                         .ToList<User>();
                 }
                 allUsers.ForEach(
@@ -65,6 +65,16 @@ namespace Okunishushi.Controllers
                 {
                     allUsers.RemoveAll(u => u.UserRole.Where(ur => ur.Role.Slug.ToLower() == role).Count() == 0);
                 }
+                if (id != 0)
+                {
+                    if (adding == true)
+                    {
+                        allUsers.RemoveAll(u => u.StudentClassrooms.Where(sc => sc.ClassroomId == id).Count() > 0);
+                    } else
+                    {
+                        allUsers.RemoveAll(u => u.StudentClassrooms.Where(sc => sc.ClassroomId == id).Count() == 0);
+                    }
+                }
              recordsTotal = db.Users.Count();
              recordsFiltered = allUsers.Count();
             }
@@ -73,6 +83,8 @@ namespace Okunishushi.Controllers
             allUsers.ForEach(u =>
             {
                 var user = new List<String>();
+
+                user.Add(u.Id.ToString());
                 user.Add(u.Username);
                 user.Add(u.Address);
                 user.Add(u.City);
@@ -81,6 +93,19 @@ namespace Okunishushi.Controllers
             });
 
             return Json(new { data, recordsTotal, recordsFiltered });
+        }
+
+        public IActionResult addUserToClassroom(int id, int userId)
+        {
+            using (var db = new ClassroomContext())
+            {
+                UserClassrooms uc = new UserClassrooms();
+                uc.ClassroomId = id;
+                uc.UserId = userId;
+                db.StudentClassrooms.Add(uc);
+                db.SaveChanges();
+            }
+            return Json("fakjea");
         }
 
     }

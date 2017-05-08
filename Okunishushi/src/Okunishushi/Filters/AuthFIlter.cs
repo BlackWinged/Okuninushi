@@ -19,14 +19,9 @@ namespace Okunishushi.Filters
         {
             public void OnAuthorization(AuthorizationFilterContext context)
             {
-                if (context.HttpContext.Session.GetString("test") == null)
+                if (context.HttpContext.Session.GetString("currentuser") == null && !context.HttpContext.Request.Path.Value.Contains("login"))
                 {
-
-                }
-                if (!context.HttpContext.Request.Path.Value.ToLower().Contains("login"))
-                {
-                    context.HttpContext.Response.Redirect("classroom/login");
-
+                    context.HttpContext.Response.Redirect("/classroom/login");
                 }
             }
         }
