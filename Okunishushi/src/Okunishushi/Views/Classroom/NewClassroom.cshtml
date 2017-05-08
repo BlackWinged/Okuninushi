@@ -139,7 +139,7 @@
 
     function setupDatatable(tableId, classroomId, role, isAdder = true) {
         var addButton = "<button type='button' rel='tooltip' class='btn btn-success add' data-original-title='' title=''><i class='material-icons'> edit</i></button>";
-        var removeButton = "<button type='button' rel='tooltip' class='btn btn-success remove' data-original-title='' title=''><i class='material-icons'> edit</i></button>";
+        var removeButton = "<button type='button' rel='tooltip' class='btn btn-danger remove' data-original-title='' title=''><i class='material-icons'> close</i></button>";
 
         var button;
         if (isAdder) {
@@ -187,8 +187,13 @@
         // Delete a record
         table.on('click', '.remove', function (e) {
             $tr = $(this).closest('tr');
-            table.row($tr).remove().draw();
-            e.preventDefault();
+            var data = table.row($tr).data();
+
+            $.get("/api/userapi/removeUserFromClassroom", { id: $("#id").val(), userId: data[0] })
+                .done(function () {
+                    $(".table").DataTable().ajax.reload(null, true);
+                });
+            $tr.fadeOut("fast");
         });
 
         //Like record

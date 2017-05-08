@@ -108,5 +108,17 @@ namespace Okunishushi.Controllers
             return Json("fakjea");
         }
 
+        public IActionResult removeUserFromClassroom(int id, int userId)
+        {
+            using (var db = new ClassroomContext())
+            {
+                UserClassrooms uc = new UserClassrooms();
+                uc = db.StudentClassrooms.Where(sc => sc.UserId == userId && sc.ClassroomId == id).Single();
+                db.StudentClassrooms.Remove(uc);
+                db.SaveChanges();
+            }
+            return Json("fakjea");
+        }
+
     }
 }
