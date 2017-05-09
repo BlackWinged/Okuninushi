@@ -15,7 +15,7 @@ namespace Okunishushi.Controllers
 {
     [AuthFilter]
     [Area("classroom")]
-    public class AdminController : Controller
+    public class HomeRoomController : Controller
     {
 
         public IActionResult Index()
@@ -125,7 +125,7 @@ namespace Okunishushi.Controllers
         {
             if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]))
             {
-                return Redirect("classroom/newuser");
+                return Redirect("classroom/admin7newuser");
             }
             using (var db = new ClassroomContext())
             {
@@ -217,7 +217,7 @@ namespace Okunishushi.Controllers
             newRoom.OwnerId = SecurityHelper.currentUserId(HttpContext.Session);
             db.Classrooms.Add(newRoom);
             db.SaveChanges();
-            return Redirect("newclassroom/"+ newRoom.Id); 
+            return Redirect("/classroom/admin/newclassroom/"+ newRoom.Id); 
         }
 
         [HttpGet]
@@ -231,9 +231,25 @@ namespace Okunishushi.Controllers
         {
             if (SecurityHelper.login(username, password, HttpContext.Session))
             {
-                return Redirect("/classroom/");
+                return Redirect("/classroom/homeroom");
             }
             return View("login");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ExecuteRegister(User newUser, string confpassword)
+        {
+            if (SecurityHelper.register(newUser, confpassword) != 0)
+            {
+                return Redirect("/classroom/homeroom");
+            }
+            return View("register");
         }
     }
 }

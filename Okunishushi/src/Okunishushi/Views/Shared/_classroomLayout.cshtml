@@ -56,17 +56,17 @@
                                     </a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
-                                    <a href="/classroom/roles/">
+                                    <a href="/classroom/admin/roles/">
                                         User roles
                                     </a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "documents" ? "active" : "")">
-                                    <a href="@Url.Action("documents")">
+                                    <a href="@Url.Action("documents","admin")">
                                         Documents
                                     </a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "classrooms" ? "active" : "")">
-                                    <a href="@Url.Action("classrooms")">
+                                    <a href="@Url.Action("classrooms", "admin")">
                                         Rooms
                                     </a>
                                 </li>

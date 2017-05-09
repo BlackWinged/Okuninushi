@@ -42,6 +42,21 @@ namespace Okunishushi.Helpers
             return 0;
         }
 
+        public static int register(User newUser, string confpassword)
+        {
+            if (isRegistrable(newUser.Username, newUser.Email, newUser.Password, confpassword))
+            {
+                using (var db = new ClassroomContext())
+                {
+                    db.Users.Add(newUser);
+                    db.SaveChanges();
+                    return newUser.Id;
+                }
+
+            }
+            return 0;
+        }
+
         public static bool isRegistrable(string username, string email, string password, string confpassword)
         {
             if (password != confpassword)

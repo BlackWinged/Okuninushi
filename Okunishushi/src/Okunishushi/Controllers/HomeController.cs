@@ -7,7 +7,7 @@ using FluentEmail.Mailgun;
 using FluentEmail.Core;
 namespace Okunishushi.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController: Controller
     {
         public IActionResult Index()
         {

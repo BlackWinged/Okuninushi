@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <a href="/classroom/newclassroom" class="btn btn-info btn-fill pull-right">Add New Room</a>
+                    <a href="@Url.Action("newclassroom")" class="btn btn-info btn-fill pull-right">Add New Room</a>
                     <h4 class="title">Simple Table</h4>
                     <p class="category">Here is a subtitle for this table</p>
                 </div>
@@ -22,7 +22,7 @@
                             @foreach (Okunishushi.Models.Classroom classroom in Model)
                             {
                                 <tr>
-                                    <td><a href="@Url.Action("newclassroom" , "classroom", new { id = classroom.Id.ToString() })"> @classroom.ClassName</a></td>
+                                    <td><a href="@Url.Action("newclassroom" , "admin", new { id = classroom.Id.ToString() })"> @classroom.ClassName</a></td>
                                 </tr>
                             }
                         </tbody>

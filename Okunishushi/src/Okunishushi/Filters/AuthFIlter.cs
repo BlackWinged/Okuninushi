@@ -21,7 +21,7 @@ namespace Okunishushi.Filters
             {
                 if (context.HttpContext.Session.GetString("currentuser") == null && !context.HttpContext.Request.Path.Value.Contains("login"))
                 {
-                    context.HttpContext.Response.Redirect("/classroom/login");
+                    context.HttpContext.Response.Redirect("/classroom/homeroom/login");
                 }
             }
         }

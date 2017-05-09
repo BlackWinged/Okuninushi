@@ -70,16 +70,20 @@ namespace Okunishushi
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "classroute",
+                    template: "{area:exists}/{controller=homeroom}/{action=Index}/{id?}"
+                    );
                 routes.MapRoute(
                     name: "apiroute",
                     template: "api/{controller=Home}/{action=Index}/{id?}"
                     );
                 routes.MapRoute(
-                    name: "adminroute",
-                    template: "classroom/{controller=Home}/{action=Index}/{id?}"
-                    );
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //    name: "adminroute",
+                //    template: "classroom/{controller=Home}/{action=Index}/{id?}"
+                //    );
                 routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index" });
             });
         }
