@@ -15,7 +15,7 @@ namespace Okunishushi.Controllers
 {
     [AuthFilter]
     [Area("classroom")]
-    public class ClassroomController : Controller
+    public class AdminController : Controller
     {
 
         public IActionResult Index()

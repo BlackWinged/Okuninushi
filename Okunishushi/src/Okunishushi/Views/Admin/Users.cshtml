@@ -26,7 +26,7 @@
                             @foreach (Okunishushi.Models.User user in Model)
                             {
                                 <tr>
-                                    <td><a href="@Url.Action("newuser" , "classroom", new { id = user.Id.ToString() })"> @user.Username</a></td>
+                                    <td><a href="@Url.Action("newuser" , "admin", new { id = user.Id.ToString() })"> @user.Username</a></td>
                                     <td>@(user.UserRole?.Count > 0 ? String.Join(", ", user.UserRole?.Select(x => x.Role.Name)) : "")</td>
                                 </tr>
                             }
