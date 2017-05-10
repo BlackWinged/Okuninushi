@@ -5593,6 +5593,10 @@
     <Content Include="wwwroot\examples\tables\extended.html" />
     <Content Include="wwwroot\examples\tables\regular.html" />
     <Content Include="wwwroot\examples\widgets.html" />
+    <Content Include="wwwroot\lib\css\dropzone.css" />
+    <Content Include="wwwroot\lib\js\Dropzone.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
