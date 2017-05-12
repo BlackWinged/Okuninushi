@@ -162,7 +162,9 @@ namespace Okunishushi.Controllers
 
         public IActionResult Documents()
         {
-            List<Document> files = GoogleDriveConnector.listFiles();
+            //List<Document> files = GoogleDriveConnector.listFiles();
+            List<Document> files = new List<Document>();
+            S3Connector.WritingAnObject();
             return View(files);
         }
 

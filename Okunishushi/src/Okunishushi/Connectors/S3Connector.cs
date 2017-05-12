@@ -8,14 +8,18 @@ namespace Okunishushi.Connectors
     public class S3Connector
     {
 
-        static string bucketName = "*** bucket name ***";
-        static string keyName = "*** key name when object is created ***";
+        static string bucketName = "classroom_test";
+        static string keyName = "testname";
         static string filePath = "*** absolute path to a sample file to upload ***";
 
         static IAmazonS3 client;
 
-        static async void WritingAnObject()
+        public static async void WritingAnObject()
         {
+            if (client == null)
+            {
+                client = client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1);
+            }
             try
             {
                 
