@@ -162,8 +162,10 @@ namespace Okunishushi.Controllers
 
         public IActionResult Documents()
         {
-            List<Document> files = GoogleDriveConnector.listFiles();
-            return View(files);
+            //List<Document> files = GoogleDriveConnector.listFiles();
+            //return View(files);
+
+            return View();
         }
 
         public IActionResult uploadFiles()

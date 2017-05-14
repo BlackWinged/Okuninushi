@@ -9,15 +9,62 @@ using System.Net.WebSockets;
 using System.Threading;
 using Okunishushi.Connectors;
 using System.Net;
+using System.IO;
+using Google.Cloud.Vision.V1;
+using Microsoft.Net.Http.Headers;
 
 namespace Okunishushi.Controllers
 {
     public class DocumentAPIController : Controller
     {
+        string[] textValues = new string[] { "text/plain", "application/json" };
         public IActionResult UploadDocuments(IFormFile file)
         {
-            S3Connector.UploadObject(file.FileName, file.OpenReadStream(), WebUtility.UrlEncode(file.FileName)); 
-            return Content("success");
+            Stream fileBuffer = file.OpenReadStream();
+            var db = new ClassroomContext();
+            Document doc = new Document();
+
+            if (file.ContentType.Contains("image"))
+            {
+                Stream fileBuffer2 = new MemoryStream();
+                fileBuffer.CopyTo(fileBuffer2);
+                fileBuffer.Seek(0, SeekOrigin.Begin);
+                IReadOnlyList<EntityAnnotation> result = GoogleMLConnector.ReadImageText(fileBuffer);
+                string lang = "";
+                string content = "";
+                foreach (var thing in result)
+                {
+                    if (thing.Locale != null)
+                    {
+                        lang = thing.Locale;
+                    }
+                    content += thing.Description;
+                }
+
+
+                fileBuffer = fileBuffer2;
+                
+            }
+            if (textValues.Contains<string>(file.ContentType))
+            {
+                StreamReader reader = new StreamReader(fileBuffer);
+                doc.Content = reader.ReadToEnd();
+            }
+            var uploadResult = S3Connector.UploadObject(file.FileName, fileBuffer, WebUtility.UrlEncode(file.FileName));
+
+
+            db.Documents.Add(doc);
+            db.SaveChanges();
+
+            return Content(doc.Id.ToString());
+        }
+
+        public IActionResult downloadFile()
+        {
+            return new FileStreamResult(null, new MediaTypeHeaderValue("text/plain"))
+            {
+                FileDownloadName = "README.md"
+            };
         }
 
         public async Task Echo(HttpContext context, WebSocket webSocket)

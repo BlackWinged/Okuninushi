@@ -7,7 +7,7 @@ namespace Okunishushi.Connectors
 {
     public class GoogleMLConnector
     {
-        public static IReadOnlyList<EntityAnnotation> ReadImageText(FileStream file)
+        public static IReadOnlyList<EntityAnnotation> ReadImageText(Stream file)
         {
             var client = ImageAnnotatorClient.Create();
             var image = Image.FromStream(file);

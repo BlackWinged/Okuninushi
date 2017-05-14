@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Okunishushi.Models
 {
@@ -145,9 +146,14 @@ namespace Okunishushi.Models
     public class Document
     {
         public int Id { get; set; }
-        public string GoogleId { get; set; }
         public string FileName { get; set; }
+        public string KeyName { get; set; }
+        public string BucketName { get; set; }
         public string Tags { get; set; }
+        public string GoogleTags { get; set; }
+        [Column(TypeName = "Text")]
+        public string Content { get; set; }
+        
         public List<ClassroomDocuments> ClassroomsDocuments { get; set; }
     }
 

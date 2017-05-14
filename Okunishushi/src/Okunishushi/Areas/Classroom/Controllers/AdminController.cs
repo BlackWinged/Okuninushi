@@ -141,7 +141,7 @@ namespace Okunishushi.Controllers
         public IActionResult Documents()
         {
             //List<Document> files = GoogleDriveConnector.listFiles();
-            GoogleMLConnector.test();
+            
             var db = new ClassroomContext();
             var files = db.Documents.ToList();
             return View(files);
