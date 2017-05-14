@@ -11,7 +11,7 @@ namespace Okunishushi.Connectors
 
         static IAmazonS3 client;
 
-        public static async void UploadObject(string filename, string filePath, string keyName, string bucketName = "classroom-test" )
+        public static async void UploadObject(string filename, Stream file, string keyName, string bucketName = "classroom-test" )
         {
             if (client == null)
             {
@@ -20,7 +20,6 @@ namespace Okunishushi.Connectors
             string contentType = "text/plain";
             try
             {
-                FileStream file = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
                 PutObjectRequest putRequest = new PutObjectRequest
                 {
                     BucketName = bucketName,
@@ -50,6 +49,5 @@ namespace Okunishushi.Connectors
                 }
             }
         }
-
     }
 }

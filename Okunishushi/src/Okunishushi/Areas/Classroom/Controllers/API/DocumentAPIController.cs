@@ -7,15 +7,17 @@ using Okunishushi.Models;
 using Microsoft.AspNetCore.Http;
 using System.Net.WebSockets;
 using System.Threading;
+using Okunishushi.Connectors;
+using System.Net;
 
 namespace Okunishushi.Controllers
 {
     public class DocumentAPIController : Controller
     {
-        public IActionResult UploadDocuments(List<IFormFile> file)
+        public IActionResult UploadDocuments(IFormFile file)
         {
-            var test = file;
-            return Content("");
+            S3Connector.UploadObject(file.FileName, file.OpenReadStream(), WebUtility.UrlEncode(file.FileName)); 
+            return Content("success");
         }
 
         public async Task Echo(HttpContext context, WebSocket webSocket)
