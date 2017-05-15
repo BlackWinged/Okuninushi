@@ -137,26 +137,15 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <a href="@Url.Action("documents")" class="btn btn-info btn-fill pull-right">Add New User</a>
                     <h4 class="title">Simple Table</h4>
                     <p class="category">Here is a subtitle for this table</p>
                 </div>
-                <div class="card-content table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                        <th>Name</th>
-                        <th>Tags</th>
-                        </thead>
-                        <tbody>
-                            @foreach (Okunishushi.Models.Document doc in Model)
-                            {
-                                <tr>
-                                    <td>@doc.FileName</td>
-                                    <td>@doc.Tags</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="card-content table-responsive doctable">
+                    <form id="search">
+                        Search <input name="query" v-model="searchQuery">
+                    </form>
+                    <document-grid :filter-key="searchQuery">
+                    </document-grid>
                 </div>
             </div>
         </div>
@@ -165,107 +154,95 @@
 
 
 <!-- component template -->
-<script type="text/x-template" id="grid-template">
-    @*<table>
-            <thead>
-                <tr>
-                    <th v-for="key in columns"
-                        @@click="sortBy(key)"
-                        :class="{ active: sortKey == key }">
-                        {{ key | capitalize }}
-                        <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-                        </span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="entry in filteredData">
-                    <td v-for="key in columns">
-                        {{entry[key]}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>*@
-</script>
-
-<script>
-        //// register the grid component
-        //Vue.component('demo-grid', {
-        //    template: '#grid-template',
-        //    props: {
-        //        data: Array,
-        //        columns: Array,
-        //        filterKey: String
-        //    },
-        //    data: function () {
-        //        var sortOrders = {}
-        //        this.columns.forEach(function (key) {
-        //            sortOrders[key] = 1
-        //        })
-        //        return {
-        //            sortKey: '',
-        //            sortOrders: sortOrders
-        //        }
-        //    },
-        //    computed: {
-        //        filteredData: function () {
-        //            var sortKey = this.sortKey
-        //            var filterKey = this.filterKey && this.filterKey.toLowerCase()
-        //            var order = this.sortOrders[sortKey] || 1
-        //            var data = this.data
-        //            if (filterKey) {
-        //                data = data.filter(function (row) {
-        //                    return Object.keys(row).some(function (key) {
-        //                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-        //                    })
-        //                })
-        //            }
-        //            if (sortKey) {
-        //                data = data.slice().sort(function (a, b) {
-        //                    a = a[sortKey]
-        //                    b = b[sortKey]
-        //                    return (a === b ? 0 : a > b ? 1 : -1) * order
-        //                })
-        //            }
-        //            return data
-        //        }
-        //    },
-        //    filters: {
-        //        capitalize: function (str) {
-        //            return str.charAt(0).toUpperCase() + str.slice(1)
-        //        }
-        //    },
-        //    methods: {
-        //        sortBy: function (key) {
-        //            this.sortKey = key
-        //            this.sortOrders[key] = this.sortOrders[key] * -1
-        //        }
-        //    }
-        //})
-
-        //// bootstrap the demo
-        //var demo = new Vue({
-        //    el: '#demo',
-        //    data: {
-        //        searchQuery: '',
-        //        gridColumns: ['name', 'power'],
-        //        gridData: [
-        //            { name: 'Chuck Norris', power: Infinity },
-        //            { name: 'Bruce Lee', power: 9000 },
-        //            { name: 'Jackie Chan', power: 7000 },
-        //            { name: 'Jet Li', power: 8000 }
-        //        ]
-        //    }
-        //})
+<script type="text/x-template" id="document-template">
+    <table class="table">
+        <thead class="text-primary">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Tags
+                </th>
+                <th>
+                    Keyname
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="entry in docs">
+                <td>
+                    {{entry['fileName']}}
+                </td>
+                <td>
+                    {{entry['tags']}}
+                </td>
+                <td>
+                    {{entry['keyName']}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </script>
 
 <script>
     $(function () {
+        Vue.component('document-grid', {
+            template: '#document-template',
+            props: {
+                data: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+                columns: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+                filterKey: String,
+                docs: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+            },
+            data: function () {
+                var sortOrders = {}
+                this.columns.forEach(function (key) {
+                    sortOrders[key] = 1
+                })
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders
+                }
+            },
+            watch: {
+                filterKey: function (newId) {
+                    this.getDoc(newId);
+                }
+            },
+            methods: {
+                getDoc: function (newId) {
+                    var doc = {};
+                    $.get("/api/documentapi/docdata?id=" + newId).
+                        done(function (data) {
+                            //var doc = JSON.parse(data);
+
+                            doc = data;
+                        });
+                    this.docs.push(doc);
+                }
+            }
+        })
+
+        // bootstrap the demo
+        var docVue = new Vue({
+            el: '.doctable',
+            data: {
+                searchQuery: ''
+            }
+        });
         var myDropzone = Dropzone.forElement("form#my-awesome-dropzone");
         myDropzone.on("success", function (file, message) {
-            alert(message);
+            docVue.searchQuery = message;
         });
-    });
-    $(document).ready(function () { 
     });
 </script>

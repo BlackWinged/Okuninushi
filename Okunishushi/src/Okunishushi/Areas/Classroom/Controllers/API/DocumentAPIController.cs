@@ -67,6 +67,16 @@ namespace Okunishushi.Controllers
             };
         }
 
+        public IActionResult docdata(int id)
+        {
+            using (var db = new ClassroomContext())
+            {
+                var doc = db.Documents.Find(id);
+
+                return Json(doc);
+            }
+
+        }
         public async Task Echo(HttpContext context, WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
