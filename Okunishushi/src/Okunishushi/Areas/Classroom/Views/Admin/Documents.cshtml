@@ -172,7 +172,7 @@
         <tbody>
             <tr v-for="entry in docs">
                 <td>
-                    {{entry['fileName']}}
+                    <a @@click.stop="showDetails" {{entry['fileName']}}
                 </td>
                 <td>
                     {{entry['tags']}}
@@ -221,14 +221,20 @@
             },
             methods: {
                 getDoc: function (newId) {
-                    var doc = {};
+                    var vm = this;
                     $.get("/api/documentapi/docdata?id=" + newId).
                         done(function (data) {
                             //var doc = JSON.parse(data);
-
-                            doc = data;
+                            var count = 0;
+                            vm.docs.forEach(function (obj) {
+                                if (obj.keyName === data.keyName) {
+                                    count = 1;
+                                }
+                            })
+                            if (!count) {
+                                vm.docs.push(data);
+                            }
                         });
-                    this.docs.push(doc);
                 }
             }
         })
