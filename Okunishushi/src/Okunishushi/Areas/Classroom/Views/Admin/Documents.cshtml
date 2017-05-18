@@ -4,150 +4,131 @@
 }
 @model List<Okunishushi.Models.Document>
 
-<div class="container-fluid">
+<div class="container-fluid doctable">
     <div class="card">
         <form action="/api/documentapi/uploaddocuments"
               class="dropzone"
               id="my-awesome-dropzone"></form>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">Edit Profile</h4>
-                    <p class="category">Complete your profile</p>
-                </div>
-                <div class="card-content">
-                    <form method="post" action="/classroom/newusersave">
-                        <input type="hidden" name="id" id="id" />
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">School Name</label>
-                                    <input type="text" class="form-control" name="schoolname">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Username</label>
-                                    <input type="text" class="form-control" name="username">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Email address</label>
-                                    <input type="email" class="form-control" name="email">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Password</label>
-                                    <input type="text" class="form-control" name="password">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Confirm password</label>
-                                    <input type="text" class="form-control" name="confpassword">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Fist Name</label>
-                                    <input type="text" class="form-control" name="firstname">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Last Name</label>
-                                    <input type="text" class="form-control" name="lastname">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Address</label>
-                                    <input type="text" class="form-control" name="address">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">City</label>
-                                    <input type="text" class="form-control" name="city">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Country</label>
-                                    <input type="text" class="form-control" name="country">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Postal Code</label>
-                                    <input type="text" class="form-control" name="zipcode">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>About Me</label>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label"> Type up your description, pretty please?</label>
-                                        <textarea class="form-control" name="description" rows="5"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
-                        <div class="clearfix"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        @*<div class="col-md-4">
-                <div class="card card-profile">
-                    <div class="card-avatar">
-                        <a href="#pablo">
-                            <img class="img" src="../assets/img/faces/marc.jpg" />
-                        </a>
-                    </div>
-                    <div class="content">
-                        <h6 class="category text-gray">CEO / Co-Founder</h6>
-                        <h4 class="card-title">Alec Thompson</h4>
-                        <p class="card-content">
-                            Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                        </p>
-                        <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
-                    </div>
-                </div>
-            </div>*@
-    </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
                     <h4 class="title">Simple Table</h4>
                     <p class="category">Here is a subtitle for this table</p>
                 </div>
-                <div class="card-content table-responsive doctable">
+                <div class="card-content table-responsive ">
                     <form id="search">
                         Search <input name="query" v-model="searchQuery">
                     </form>
-                    <document-grid :filter-key="searchQuery">
+                    <document-grid :docs="docs">
                     </document-grid>
                 </div>
             </div>
+        </div>
+        <div class="col-md-6">
+        <div class="card">
+        <div class="card-header" data-background-color="purple">
+        <h4 class="title">Edit Profile</h4>
+        <p class="category">Complete your profile</p>
+        </div>
+        <div class="card-content">
+        <form method="post" action="/classroom/newusersave">
+        <input type="hidden" name="id" id="id" />
+        <div class="row">
+        <div class="col-md-5">
+        <div class="form-group label-floating">
+        <label class="control-label">School Name</label>
+        <input type="text" class="form-control" name="schoolname">
+        </div>
+        </div>
+        <div class="col-md-3">
+        <div class="form-group label-floating">
+        <label class="control-label">Username</label>
+        <input type="text" class="form-control" name="username">
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">Email address</label>
+        <input type="email" class="form-control" name="email">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">Password</label>
+        <input type="text" class="form-control" name="password">
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">Confirm password</label>
+        <input type="text" class="form-control" name="confpassword">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group label-floating">
+        <label class="control-label">Fist Name</label>
+        <input type="text" class="form-control" name="firstname">
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group label-floating">
+        <label class="control-label">Last Name</label>
+        <input type="text" class="form-control" name="lastname">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group label-floating">
+        <label class="control-label">Address</label>
+        <input type="text" class="form-control" name="address">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">City</label>
+        <input type="text" class="form-control" name="city">
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">Country</label>
+        <input type="text" class="form-control" name="country">
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="form-group label-floating">
+        <label class="control-label">Postal Code</label>
+        <input type="text" class="form-control" name="zipcode">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group">
+        <label>About Me</label>
+        <div class="form-group label-floating">
+        <label class="control-label"> Type up your description, pretty please?</label>
+        <textarea class="form-control" name="description" rows="5"></textarea>
+        </div>
+        </div>
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+        <div class="clearfix"></div>
+        </form>
+        </div>
+        </div>
         </div>
     </div>
 </div>
@@ -172,7 +153,7 @@
         <tbody>
             <tr v-for="entry in docs">
                 <td>
-                    <a @@click.stop="showDetails" {{entry['fileName']}}
+                    <a @@click.stop="showDetails"> {{entry['fileName']}}</a>
                 </td>
                 <td>
                     {{entry['tags']}}
@@ -204,18 +185,19 @@
                     default: function () { return [] }
                 },
             },
-            data: function () {
-                var sortOrders = {}
-                this.columns.forEach(function (key) {
-                    sortOrders[key] = 1
-                })
-                return {
-                    sortKey: '',
-                    sortOrders: sortOrders
-                }
+
+        })
+
+        // bootstrap the demo
+        var docVue = new Vue({
+            el: '.doctable',
+            data: {
+                searchQuery: '',
+                docs: [],
+                currentId: 0,
             },
             watch: {
-                filterKey: function (newId) {
+                searchQuery: function (newId) {
                     this.getDoc(newId);
                 }
             },
@@ -236,14 +218,6 @@
                             }
                         });
                 }
-            }
-        })
-
-        // bootstrap the demo
-        var docVue = new Vue({
-            el: '.doctable',
-            data: {
-                searchQuery: ''
             }
         });
         var myDropzone = Dropzone.forElement("form#my-awesome-dropzone");

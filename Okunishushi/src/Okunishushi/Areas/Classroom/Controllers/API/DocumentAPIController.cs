@@ -24,22 +24,24 @@ namespace Okunishushi.Controllers
             var db = new ClassroomContext();
             Document doc = new Document();
 
+            doc.KeyName = WebUtility.UrlEncode(file.FileName);
+
             if (file.ContentType.Contains("image"))
             {
                 Stream fileBuffer2 = new MemoryStream();
                 fileBuffer.CopyTo(fileBuffer2);
                 fileBuffer.Seek(0, SeekOrigin.Begin);
-                //IReadOnlyList<EntityAnnotation> result = GoogleMLConnector.ReadImageText(fileBuffer);
+                IReadOnlyList<EntityAnnotation> result = GoogleMLConnector.ReadImageText(fileBuffer);
                 string lang = "";
                 string content = "";
-                //foreach (var thing in result)
-                //{
-                //    if (thing.Locale != null)
-                //    {
-                //        lang = thing.Locale;
-                //    }
-                //    content += thing.Description;
-                //}
+                foreach (var thing in result)
+                {
+                    if (thing.Locale != null)
+                    {
+                        lang = thing.Locale;
+                    }
+                    content += thing.Description;
+                }
 
 
                 fileBuffer = fileBuffer2;
