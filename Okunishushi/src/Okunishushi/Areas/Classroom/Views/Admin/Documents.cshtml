@@ -23,112 +23,112 @@
                     <form id="search">
                         Search <input name="query" v-model="searchQuery">
                     </form>
-                    <document-grid :docs="docs">
+                    <document-grid v-on:isclicked="getDocumentData" :docs="docs">
                     </document-grid>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-        <div class="card">
-        <div class="card-header" data-background-color="purple">
-        <h4 class="title">Edit Profile</h4>
-        <p class="category">Complete your profile</p>
-        </div>
-        <div class="card-content">
-        <form method="post" action="/classroom/newusersave">
-        <input type="hidden" name="id" id="id" />
-        <div class="row">
-        <div class="col-md-5">
-        <div class="form-group label-floating">
-        <label class="control-label">School Name</label>
-        <input type="text" class="form-control" name="schoolname">
-        </div>
-        </div>
-        <div class="col-md-3">
-        <div class="form-group label-floating">
-        <label class="control-label">Username</label>
-        <input type="text" class="form-control" name="username">
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">Email address</label>
-        <input type="email" class="form-control" name="email">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">Password</label>
-        <input type="text" class="form-control" name="password">
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">Confirm password</label>
-        <input type="text" class="form-control" name="confpassword">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6">
-        <div class="form-group label-floating">
-        <label class="control-label">Fist Name</label>
-        <input type="text" class="form-control" name="firstname">
-        </div>
-        </div>
-        <div class="col-md-6">
-        <div class="form-group label-floating">
-        <label class="control-label">Last Name</label>
-        <input type="text" class="form-control" name="lastname">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-12">
-        <div class="form-group label-floating">
-        <label class="control-label">Address</label>
-        <input type="text" class="form-control" name="address">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">City</label>
-        <input type="text" class="form-control" name="city">
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">Country</label>
-        <input type="text" class="form-control" name="country">
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="form-group label-floating">
-        <label class="control-label">Postal Code</label>
-        <input type="text" class="form-control" name="zipcode">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-12">
-        <div class="form-group">
-        <label>About Me</label>
-        <div class="form-group label-floating">
-        <label class="control-label"> Type up your description, pretty please?</label>
-        <textarea class="form-control" name="description" rows="5"></textarea>
-        </div>
-        </div>
-        </div>
-        </div>
-        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
-        <div class="clearfix"></div>
-        </form>
-        </div>
-        </div>
+            <div class="card">
+                <div class="card-header" data-background-color="purple">
+                    <h4 class="title">Edit Profile</h4>
+                    <p class="category">Complete your profile</p>
+                </div>
+                <div class="card-content">
+                    <form method="post" action="/classroom/newusersave">
+                        <input type="hidden" name="id" id="id" />
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">School Name</label>
+                                    <input type="text" class="form-control" name="schoolname">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Username</label>
+                                    <input type="text" class="form-control" name="username">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Email address</label>
+                                    <input type="email" class="form-control" name="email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Password</label>
+                                    <input type="text" class="form-control" name="password">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Confirm password</label>
+                                    <input type="text" class="form-control" name="confpassword">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Fist Name</label>
+                                    <input type="text" class="form-control" name="firstname">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Last Name</label>
+                                    <input type="text" class="form-control" name="lastname">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    <input type="text" class="form-control" name="address">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    <input type="text" class="form-control" name="city">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Country</label>
+                                    <input type="text" class="form-control" name="country">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Postal Code</label>
+                                    <input type="text" class="form-control" name="zipcode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>About Me</label>
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> Type up your description, pretty please?</label>
+                                        <textarea class="form-control" name="description" rows="5" :value="currentDoc.content"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -151,9 +151,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="entry in docs">
+            <tr v-for="entry in docs" :data-row="entry['id']" @@click="getDocId">
                 <td>
-                    <a @@click.stop="showDetails"> {{entry['fileName']}}</a>
+                    <a :data-row="entry['id']"> {{entry['fileName']}}</a>
                 </td>
                 <td>
                     {{entry['tags']}}
@@ -167,7 +167,7 @@
 </script>
 
 <script>
-    $(function () {
+    $(document).ready(function () {
         Vue.component('document-grid', {
             template: '#document-template',
             props: {
@@ -185,6 +185,11 @@
                     default: function () { return [] }
                 },
             },
+            methods: {
+                getDocId: function (e) {
+                    this.$emit("isclicked", e.target.dataset.row);
+                }
+            },
 
         })
 
@@ -194,12 +199,12 @@
             data: {
                 searchQuery: '',
                 docs: [],
-                currentId: 0,
+                currentDoc: {}
             },
             watch: {
                 searchQuery: function (newId) {
                     this.getDoc(newId);
-                }
+                },
             },
             methods: {
                 getDoc: function (newId) {
@@ -212,17 +217,28 @@
                                 if (obj.keyName === data.keyName) {
                                     count = 1;
                                 }
-                            })
+                            });
                             if (!count) {
                                 vm.docs.push(data);
                             }
                         });
+                },
+                getDocumentData: function (e) {
+                    var vinstance = this;
+                    this.docs.forEach(function (obj) {
+                        if (obj.id === parseInt(e)) {
+                            vinstance.currentDoc = obj;
+                        }
+                    });
                 }
-            }
+            },
         });
-        var myDropzone = Dropzone.forElement("form#my-awesome-dropzone");
+        $("#my-awesome-dropzone").dropzone({ url: "/api/documentapi/uploaddocuments" });
+
+        var myDropzone = Dropzone.forElement("#my-awesome-dropzone");
         myDropzone.on("success", function (file, message) {
             docVue.searchQuery = message;
         });
     });
+
 </script>

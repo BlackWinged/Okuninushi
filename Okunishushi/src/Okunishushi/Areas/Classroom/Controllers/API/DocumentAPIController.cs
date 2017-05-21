@@ -25,6 +25,7 @@ namespace Okunishushi.Controllers
             Document doc = new Document();
 
             doc.KeyName = WebUtility.UrlEncode(file.FileName);
+            doc.FileName = file.FileName;
 
             if (file.ContentType.Contains("image"))
             {
@@ -47,7 +48,11 @@ namespace Okunishushi.Controllers
                 fileBuffer = fileBuffer2;
                 
             }
-            if (textValues.Contains<string>(file.ContentType))
+            else if (textValues.Contains<string>(file.ContentType))
+            {
+                StreamReader reader = new StreamReader(fileBuffer);
+                doc.Content = reader.ReadToEnd();
+            } else
             {
                 StreamReader reader = new StreamReader(fileBuffer);
                 doc.Content = reader.ReadToEnd();
