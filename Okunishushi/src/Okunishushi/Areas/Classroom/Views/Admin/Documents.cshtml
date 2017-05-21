@@ -15,11 +15,11 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">Simple Table</h4>
-                    <p class="category">Here is a subtitle for this table</p>
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
                 </div>
-                <div class="card-content table-responsive ">
+                <div class="card-content">
+                    <h4 class="card-title">Uploaded files:</h4>
                     <form id="search">
                         Search <input name="query" v-model="searchQuery">
                     </form>
@@ -30,103 +30,59 @@
         </div>
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">Edit Profile</h4>
-                    <p class="category">Complete your profile</p>
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
                 </div>
                 <div class="card-content">
-                    <form method="post" action="/classroom/newusersave">
-                        <input type="hidden" name="id" id="id" />
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">School Name</label>
-                                    <input type="text" class="form-control" name="schoolname">
-                                </div>
+                    <h4 class="card-title">Edit document data:</h4>
+                    <input type="hidden" name="id" v-model="currentDoc.id" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">File name</label>
+                                <input type="text" class="form-control" name="filename" v-model="currentDoc.fileName">
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Username</label>
-                                    <input type="text" class="form-control" name="username">
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Key name</label>
+                                <input type="text" class="form-control" name="keyname" v-model="currentDoc.keyName">
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Tags</label>
+                                <input type="text" class="form-control" name="tags" v-model="currentDoc.tags">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" @@click="saveDocData" class="btn btn-info btn-fill pull-right">Save</a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-if="showContent">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header" data-background-color="purple">
+                    <h4 class="title">Simple Table</h4>
+                    <p class="category">Here is a subtitle for this table</p>
+                </div>
+                <div class="card-content table-responsive ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>About Me</label>
                                 <div class="form-group label-floating">
-                                    <label class="control-label">Email address</label>
-                                    <input type="email" class="form-control" name="email">
+                                    <label class="control-label"> Type up your description, pretty please?</label>
+                                    <textarea class="form-control" name="description" rows="25" :value="currentDoc.content"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Password</label>
-                                    <input type="text" class="form-control" name="password">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Confirm password</label>
-                                    <input type="text" class="form-control" name="confpassword">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Fist Name</label>
-                                    <input type="text" class="form-control" name="firstname">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Last Name</label>
-                                    <input type="text" class="form-control" name="lastname">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Address</label>
-                                    <input type="text" class="form-control" name="address">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">City</label>
-                                    <input type="text" class="form-control" name="city">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Country</label>
-                                    <input type="text" class="form-control" name="country">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Postal Code</label>
-                                    <input type="text" class="form-control" name="zipcode">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>About Me</label>
-                                    <div class="form-group label-floating">
-                                        <label class="control-label"> Type up your description, pretty please?</label>
-                                        <textarea class="form-control" name="description" rows="5" :value="currentDoc.content"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
-                        <div class="clearfix"></div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,7 +155,8 @@
             data: {
                 searchQuery: '',
                 docs: [],
-                currentDoc: {}
+                currentDoc: {},
+                showContent: false,
             },
             watch: {
                 searchQuery: function (newId) {
@@ -223,6 +180,13 @@
                             }
                         });
                 },
+                saveDocData: function (newId) {
+                    var vm = this;
+                    $.post("/api/documentapi/docdatasave", this.currentDoc).
+                        done(function (data) {
+                            //gašenje spinnera, eventually
+                        });
+                },
                 getDocumentData: function (e) {
                     var vinstance = this;
                     this.docs.forEach(function (obj) {
@@ -230,6 +194,13 @@
                             vinstance.currentDoc = obj;
                         }
                     });
+                    if (this.currentDoc.content != null) {
+                        if (this.currentDoc.content.length > 500) {
+                            showContent = false;
+                        } else {
+                            showContent = true;
+                        }
+                    }
                 }
             },
         });

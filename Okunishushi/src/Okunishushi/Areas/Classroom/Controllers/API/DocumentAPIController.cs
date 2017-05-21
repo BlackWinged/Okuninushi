@@ -32,10 +32,15 @@ namespace Okunishushi.Controllers
                 Stream fileBuffer2 = new MemoryStream();
                 fileBuffer.CopyTo(fileBuffer2);
                 fileBuffer.Seek(0, SeekOrigin.Begin);
-                IReadOnlyList<EntityAnnotation> result = GoogleMLConnector.ReadImageText(fileBuffer);
+                IReadOnlyList<EntityAnnotation> resultText = GoogleMLConnector.ReadImageText(fileBuffer);
+
+                fileBuffer = fileBuffer2;
+                FileStream fstream = (FileStream) fileBuffer;
+
+                IReadOnlyList<EntityAnnotation> resultLabels = GoogleMLConnector.LabelImage(fstream);
                 string lang = "";
                 string content = "";
-                foreach (var thing in result)
+                foreach (var thing in resultText)
                 {
                     if (thing.Locale != null)
                     {
@@ -43,16 +48,17 @@ namespace Okunishushi.Controllers
                     }
                     content += thing.Description;
                 }
-
+                doc.Content = content;
 
                 fileBuffer = fileBuffer2;
-                
+
             }
             else if (textValues.Contains<string>(file.ContentType))
             {
                 StreamReader reader = new StreamReader(fileBuffer);
                 doc.Content = reader.ReadToEnd();
-            } else
+            }
+            else
             {
                 StreamReader reader = new StreamReader(fileBuffer);
                 doc.Content = reader.ReadToEnd();
@@ -82,6 +88,19 @@ namespace Okunishushi.Controllers
 
                 return Json(doc);
             }
+
+        }
+
+        public IActionResult docdatasave(Document data)
+        {
+
+            using (var db = new ClassroomContext())
+            {
+                db.Update(data);
+                db.SaveChanges();
+            }
+
+            return Content("success");
 
         }
         public async Task Echo(HttpContext context, WebSocket webSocket)
