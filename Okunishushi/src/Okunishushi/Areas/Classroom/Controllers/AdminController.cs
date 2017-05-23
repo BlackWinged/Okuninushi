@@ -22,6 +22,8 @@ namespace Okunishushi.Controllers
 
         public IActionResult Users()
         {
+            ElasticManager ec = new ElasticManager();
+            var result = ec.search("tag");
             List<User> allUsers = new List<Models.User>();
             using (var db = new ClassroomContext())
             {

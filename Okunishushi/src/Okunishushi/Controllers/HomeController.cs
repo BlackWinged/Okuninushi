@@ -45,8 +45,7 @@ namespace Okunishushi.Controllers
                 .From(email)
                 .To("lovro.gamulin@gmail.com")
                 .Subject("Poruka sa sajta")
-                .Body(message + "<br/> Ime: " + name +" <br/> Telefonski broj: " + phone)
-                .BodyAsHtml();
+                .Body(message + "<br/> Ime: " + name + " <br/> Telefonski broj: " + phone);
 
             var response = emailSend.SendAsync();
             return Content(response.ToString());
