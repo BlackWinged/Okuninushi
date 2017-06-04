@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FluentEmail.Mailgun;
 using FluentEmail.Core;
+
+
 namespace Okunishushi.Controllers
 {
     public class HomeController: Controller
     {
         public IActionResult Index()
         {
-            return View("homepage");
+            return View("Homepage");
         }
 
         public IActionResult About()
