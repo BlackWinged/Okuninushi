@@ -8,6 +8,8 @@ using FluentEmail.Core;
 using Xfinium.Pdf;
 using Xfinium.Pdf.Content;
 using System.IO;
+using Okunishushi.Connectors;
+using Google.Cloud.Vision.V1;
 
 namespace Okunishushi.Controllers
 {
@@ -25,8 +27,8 @@ namespace Okunishushi.Controllers
             //    cont += ce.ExtractText();
             //    img.Add(ce.ExtractImages(true));
             //}
-            return View("Homepage");
-            //return (Stream)img[34].First().ImageStream;
+
+            return View();
         }
 
         public IActionResult About()

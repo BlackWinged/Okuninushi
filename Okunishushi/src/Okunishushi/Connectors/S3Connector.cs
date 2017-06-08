@@ -52,10 +52,8 @@ namespace Okunishushi.Connectors
             return null;
         }
 
-        static async Task<string> ReadObjectData(string keyName, string bucketName = "classroom-test")
+        public static async Task<Stream> ReadObjectData(string keyName, string bucketName = "classroom-test")
         {
-            string responseBody = "";
-
             using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
             {
                 GetObjectRequest request = new GetObjectRequest
@@ -66,12 +64,10 @@ namespace Okunishushi.Connectors
 
                 using (GetObjectResponse response = await client.GetObjectAsync(request))
                 using (Stream responseStream = response.ResponseStream)
-                using (StreamReader reader = new StreamReader(responseStream))
                 {
-                    responseBody = reader.ReadToEnd();
+                    return responseStream;
                 }
             }
-            return responseBody;
         }
     }
 }

@@ -12,6 +12,8 @@ using System.Net;
 using System.IO;
 using Google.Cloud.Vision.V1;
 using Microsoft.Net.Http.Headers;
+using Xfinium.Pdf;
+using Xfinium.Pdf.Content;
 
 namespace Okunishushi.Controllers
 {
@@ -58,6 +60,19 @@ namespace Okunishushi.Controllers
                 StreamReader reader = new StreamReader(fileBuffer);
                 doc.Content = reader.ReadToEnd();
             }
+            else if (file.ContentType.ToLower().Contains("pdf"))
+            {
+                string cont = "";
+                PdfFixedDocument pdfdoc = new PdfFixedDocument(fileBuffer);
+                List<PdfVisualImageCollection> img = new List<PdfVisualImageCollection>();
+                foreach (PdfPage page in pdfdoc.Pages)
+                {
+                    PdfContentExtractor ce = new PdfContentExtractor(page);
+                    cont += ce.ExtractText();
+                    //img.Add(ce.ExtractImages(true));
+                }
+                doc.Content = cont;
+            }
             else
             {
                 StreamReader reader = new StreamReader(fileBuffer);
@@ -65,18 +80,28 @@ namespace Okunishushi.Controllers
             }
             var uploadResult = S3Connector.UploadObject(file.FileName, fileBuffer, WebUtility.UrlEncode(file.FileName));
 
-
-            db.Documents.Add(doc);
-            db.SaveChanges();
+            if (db.Documents.Where(x => x.KeyName == doc.KeyName).Count()  ==  0)
+            {
+                db.Documents.Add(doc);
+                db.SaveChanges();
+                ElasticManager em = new ElasticManager();
+                em.addDocument(doc);
+            }
 
             return Content(doc.Id.ToString());
         }
 
-        public IActionResult downloadFile()
+        public ActionResult downloadFile(string keyName)
         {
+            Task<Stream> result = S3Connector.ReadObjectData(keyName);
+
+            result = S3Connector.ReadObjectData(keyName);
+
             return new FileStreamResult(null, new MediaTypeHeaderValue("text/plain"))
             {
-                FileDownloadName = "README.md"
+                FileDownloadName = "README.md",
+                FileStream = result.Result
+
             };
         }
 
@@ -103,6 +128,8 @@ namespace Okunishushi.Controllers
             return Content("success");
 
         }
+
+
         public async Task Echo(HttpContext context, WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
