@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FluentEmail.Mailgun;
 using FluentEmail.Core;
-
+using Xfinium.Pdf;
+using Xfinium.Pdf.Content;
+using System.IO;
+using Okunishushi.Connectors;
+using Google.Cloud.Vision.V1;
 
 namespace Okunishushi.Controllers
 {
@@ -13,7 +17,18 @@ namespace Okunishushi.Controllers
     {
         public IActionResult Index()
         {
-            return View("Homepage");
+            //string cont = "";
+            //Stream str = new FileStream(@"I:\SkyDrive\Nihongo\GENKI I.pdf", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            //PdfFixedDocument doc = new PdfFixedDocument(str);
+            //List<PdfVisualImageCollection> img = new List<PdfVisualImageCollection>();
+            //foreach (PdfPage page in doc.Pages)
+            //{
+            //    PdfContentExtractor ce = new PdfContentExtractor(page);
+            //    cont += ce.ExtractText();
+            //    img.Add(ce.ExtractImages(true));
+            //}
+
+            return View();
         }
 
         public IActionResult About()

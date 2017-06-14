@@ -46,6 +46,11 @@ namespace Okunishushi.Connectors
             }
         }
 
+        public void addDocument(Document doc)
+        {
+            Client.Index(doc);
+        }
+
         public ISearchResponse<Document> search(string query)
         {
             var result = Client.Search<Document>(s => s
