@@ -13,7 +13,7 @@ using Okunishushi.Helpers;
 
 namespace Okunishushi.Controllers
 {
-    [AuthFilter]
+    //[AuthFilter]
     [Area("classroom")]
     public class AdminController : Controller
     {

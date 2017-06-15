@@ -14,6 +14,7 @@ using Google.Cloud.Vision.V1;
 using Microsoft.Net.Http.Headers;
 using Xfinium.Pdf;
 using Xfinium.Pdf.Content;
+using Amazon.S3.Model;
 
 namespace Okunishushi.Controllers
 {
@@ -37,9 +38,9 @@ namespace Okunishushi.Controllers
                 IReadOnlyList<EntityAnnotation> resultText = GoogleMLConnector.ReadImageText(fileBuffer);
 
                 fileBuffer = fileBuffer2;
-                FileStream fstream = (FileStream) fileBuffer;
+                fileBuffer.Seek(0, SeekOrigin.Begin);
 
-                IReadOnlyList<EntityAnnotation> resultLabels = GoogleMLConnector.LabelImage(fstream);
+                IReadOnlyList<EntityAnnotation> resultLabels = GoogleMLConnector.LabelImage(fileBuffer);
                 string lang = "";
                 string content = "";
                 foreach (var thing in resultText)
@@ -50,7 +51,15 @@ namespace Okunishushi.Controllers
                     }
                     content += thing.Description;
                 }
+
                 doc.Content = content;
+                content = "";
+
+                foreach (var thing in resultLabels)
+                {
+                    content += thing.Description + ", ";
+                }
+                doc.GoogleTags = content;
 
                 fileBuffer = fileBuffer2;
 
@@ -91,17 +100,14 @@ namespace Okunishushi.Controllers
             return Content(doc.Id.ToString());
         }
 
-        public ActionResult downloadFile(string keyName)
+        public FileStreamResult downloadFile(string keyName)
         {
-            Task<Stream> result = S3Connector.ReadObjectData(keyName);
+             
+            GetObjectResponse result = S3Connector.ReadObjectData(WebUtility.UrlEncode(keyName));
 
-            result = S3Connector.ReadObjectData(keyName);
-
-            return new FileStreamResult(null, new MediaTypeHeaderValue("text/plain"))
+            return new FileStreamResult(result.ResponseStream, new MediaTypeHeaderValue("text/plain"))
             {
-                FileDownloadName = "README.md",
-                FileStream = result.Result
-
+                FileDownloadName = keyName,
             };
         }
 
@@ -123,6 +129,8 @@ namespace Okunishushi.Controllers
             {
                 db.Update(data);
                 db.SaveChanges();
+                ElasticManager em = new ElasticManager();
+                em.addDocument(data);
             }
 
             return Content("success");

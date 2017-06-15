@@ -16,7 +16,7 @@ namespace Okunishushi.Connectors
             return response;
         }
 
-        public static IReadOnlyList<EntityAnnotation> LabelImage(FileStream file)
+        public static IReadOnlyList<EntityAnnotation> LabelImage(Stream file)
         {
             var client = ImageAnnotatorClient.Create();
             var image = Image.FromStream(file);

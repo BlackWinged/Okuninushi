@@ -13,7 +13,7 @@ using Okunishushi.Helpers;
 
 namespace Okunishushi.Controllers
 {
-    [AuthFilter]
+    //[AuthFilter]
     [Area("classroom")]
     public class HomeRoomController : Controller
     {
@@ -42,9 +42,11 @@ namespace Okunishushi.Controllers
             return View();
         }
 
-        public IActionResult Search()
+        public IActionResult Search(string search)
         {
-            return View();
+            ElasticManager em = new ElasticManager();
+            var results = em.search(search);
+            return View(results);
         }
 
 
@@ -60,6 +62,7 @@ namespace Okunishushi.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+
             return View();
         }
 

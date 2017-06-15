@@ -10,11 +10,11 @@ namespace Okunishushi.Connectors
     public class ElasticManager
     {
         private static ElasticClient Client { get; set; }
-        string elasticAdress = "http://54.93.227.141:9200";
+        string elasticAdress = "http://52.59.35.80:9200";
 
         public ElasticManager()
         {
-            if (Client != null)
+            if (Client == null)
             {
                 var server = new Uri(elasticAdress);
                 var settings = new ConnectionSettings(server).DefaultIndex("classroom.search");
@@ -56,10 +56,28 @@ namespace Okunishushi.Connectors
             var result = Client.Search<Document>(s => s
                 .Size(25)
                 .Query(q => q
-                    .QueryString(qs => qs
+                    .MultiMatch(m => m
+                        .Fields(f => f
+                            .Field(d=>d.FileName)
+                            .Field(d=>d.Content)
+                            .Field(d => d.Tags)
+                            .Field(d => d.GoogleTags)
+                        )
                         .Query(query)
                     )
                 )
+               .Highlight(h => h
+                .PreTags("<b>")
+                .PostTags("</b>")
+                .Fields(
+                    fs => fs
+                    .Field(p => p.Content)
+                    .Type("plain")
+                    .ForceSource()
+                    .FragmentSize(150)
+                    .NumberOfFragments(3)
+                )
+            )
             );
             return result;
         }

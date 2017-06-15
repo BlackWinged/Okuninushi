@@ -11,7 +11,7 @@ namespace Okunishushi.Connectors
 
         static IAmazonS3 client;
 
-        public static async Task<PutObjectResponse> UploadObject(string filename, Stream file, string keyName, string contentType = "text/plain", string bucketName = "classroom-test" )
+        public static async Task<PutObjectResponse> UploadObject(string filename, Stream file, string keyName, string contentType = "text/plain", string bucketName = "classroom-test")
         {
             if (client == null)
             {
@@ -52,21 +52,20 @@ namespace Okunishushi.Connectors
             return null;
         }
 
-        public static async Task<Stream> ReadObjectData(string keyName, string bucketName = "classroom-test")
+        public static GetObjectResponse ReadObjectData(string keyName, string bucketName = "classroom-test")
         {
-            using (client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1))
+            using (client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1))
             {
+
                 GetObjectRequest request = new GetObjectRequest
                 {
                     BucketName = bucketName,
                     Key = keyName
                 };
 
-                using (GetObjectResponse response = await client.GetObjectAsync(request))
-                using (Stream responseStream = response.ResponseStream)
-                {
-                    return responseStream;
-                }
+                GetObjectResponse result = client.GetObjectAsync(request).Result;
+
+                return result;
             }
         }
     }

@@ -58,6 +58,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Image tags</label>
+                                <input type="text" class="form-control" name="tags" v-model="currentDoc.googleTags">
+                            </div>
+                        </div>
+                    </div>
                     <a href="#" @@click="saveDocData" class="btn btn-info btn-fill pull-right">Save</a>
                     <div class="clearfix"></div>
                 </div>
@@ -195,10 +203,10 @@
                         }
                     });
                     if (this.currentDoc.content != null) {
-                        if (this.currentDoc.content.length > 500) {
-                            showContent = false;
+                        if (this.currentDoc.content.length > 3000) {
+                            this.showContent = true;
                         } else {
-                            showContent = true;
+                            this.showContent = true;
                         }
                     }
                 }
