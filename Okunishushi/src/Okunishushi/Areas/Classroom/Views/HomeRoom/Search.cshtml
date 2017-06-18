@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <div class="card card-chart">
                     <div class="card-content">
-                        <h4 class="card-title">@doc.Source.FileName </h4>
+                        <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName"><h4 class="card-title">@doc.Source.FileName </h4></a>
                         @foreach (var obj in doc.Highlights.Keys)
                         {
                             @foreach (var text in doc.Highlights[obj].Highlights)
@@ -26,7 +26,9 @@
                         <div class="stats">
                             @if (!String.IsNullOrEmpty(doc.Source.Tags))
                             {
-                                <i class="material-icons">access_time</i><span>Tags: @doc.Source.Tags</span>
+                                <i class="material-icons">access_time</i><span>
+                                    Tags: @doc.Source.LinkTags 
+                                </span>
                             }
                             else
                             {
@@ -55,7 +57,7 @@
                                 <i class="material-icons text-danger">warning</i>
                                 @if (!String.IsNullOrEmpty(doc.Source.Tags))
                                 {
-                                    <i class="material-icons">access_time</i><span>Tags: @doc.Source.Tags</span>
+                                    <i class="material-icons">access_time</i><span>Tags: @doc.Source.LinkTags</span>
                                 }
                                 else
                                 {

@@ -209,6 +209,10 @@
                             this.showContent = true;
                         }
                     }
+                    setTimeout(function () {
+                        $(".form-control").trigger("keydown")
+                    }, 50);
+
                 }
             },
         });

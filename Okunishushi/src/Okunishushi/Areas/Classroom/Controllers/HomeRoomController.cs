@@ -91,5 +91,12 @@ namespace Okunishushi.Controllers
             }
             return View("register");
         }
+
+        public IActionResult redoElastic()
+        {
+            ElasticManager em = new ElasticManager();
+            em.fill();
+            return Content("redone");
+        }
     }
 }
