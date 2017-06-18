@@ -155,7 +155,7 @@ namespace Okunishushi.Models
         public string BucketName { get; set; }
         public string Tags { get; set; }
         public string GoogleTags { get; set; }
-        [Column(TypeName = "Text")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Content { get; set; }
 
         [NotMapped]
@@ -164,29 +164,34 @@ namespace Okunishushi.Models
         {
             get
             {
-                string[] tags = Tags.Split(',');
-                List<TagBuilder> cleanedTags = new List<TagBuilder>();
-                TagBuilder tagContainer = new TagBuilder("div");
-                tagContainer.AddCssClass("bootstrap-tagsinput");
-
-                foreach (string tag in tags)
+                if (!string.IsNullOrEmpty(Tags))
                 {
-                    TagBuilder container = new TagBuilder("span");
-                    container.AddCssClass("tag");
-                    container.AddCssClass("label");
-                    container.AddCssClass("label-info");
-                    TagBuilder cleanedTag = new TagBuilder("a");
-                    cleanedTag.TagRenderMode = TagRenderMode.Normal;
-                    cleanedTag.InnerHtml.Append(tag.Trim());
-                    cleanedTag.MergeAttribute("href", "/classroom/homeroom/search?tagsOnly=true&search=" + tag.Trim().ToLower());
-                    container.InnerHtml.AppendHtml(cleanedTag);
-                    cleanedTags.Add(container);
-                    tagContainer.InnerHtml.AppendHtml(container);
+                    string[] tags = Tags.Split(',');
+                    List<TagBuilder> cleanedTags = new List<TagBuilder>();
+                    TagBuilder tagContainer = new TagBuilder("div");
+                    tagContainer.AddCssClass("bootstrap-tagsinput");
+
+                    foreach (string tag in tags)
+                    {
+                        TagBuilder container = new TagBuilder("span");
+                        container.AddCssClass("tag");
+                        container.AddCssClass("label");
+                        container.AddCssClass("label-info");
+                        TagBuilder cleanedTag = new TagBuilder("a");
+                        cleanedTag.TagRenderMode = TagRenderMode.Normal;
+                        cleanedTag.InnerHtml.Append(tag.Trim());
+                        cleanedTag.MergeAttribute("href", "/classroom/homeroom/search?tagsOnly=true&search=" + tag.Trim().ToLower());
+                        container.InnerHtml.AppendHtml(cleanedTag);
+                        cleanedTags.Add(container);
+                        tagContainer.InnerHtml.AppendHtml(container);
+                    }
+                    return tagContainer;
+
                 }
-                return tagContainer;
+                return null;
             }
         }
-        
+
         public List<ClassroomDocuments> ClassroomsDocuments { get; set; }
     }
 

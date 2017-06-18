@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Okunishushi.Filters;
 using System.Net.WebSockets;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Okunishushi
 {
@@ -35,12 +36,19 @@ namespace Okunishushi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue;
+                x.MultipartHeadersLengthLimit = int.MaxValue;
+            });
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
 
             services.AddDistributedMemoryCache();
+
 
             services.AddSession(options =>
             {

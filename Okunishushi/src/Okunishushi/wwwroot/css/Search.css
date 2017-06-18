@@ -1,0 +1,7 @@
+﻿.card-description {
+    overflow-wrap: break-word;
+}
+
+.card-title {
+    overflow: hidden;
+}

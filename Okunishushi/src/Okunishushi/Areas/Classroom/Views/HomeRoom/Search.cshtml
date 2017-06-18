@@ -4,6 +4,10 @@
 }
 @model Nest.SearchResponse<Okunishushi.Models.Document>
 
+@section extraCss{
+    <link href="~/css/Search.css" rel="stylesheet" />
+}
+
 <div class="container-fluid">
     <h3>Search results</h3>
 
@@ -13,21 +17,26 @@
             <div class="col-md-4">
                 <div class="card card-chart">
                     <div class="card-content">
-                        <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName"><h4 class="card-title">@doc.Source.FileName </h4></a>
-                        @foreach (var obj in doc.Highlights.Keys)
-                        {
-                            @foreach (var text in doc.Highlights[obj].Highlights)
+                        <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName </h4></a>
+                        <div class="card-description">
+                            @foreach (var obj in doc.Highlights.Keys)
                             {
-                                <p class="category">@Html.Raw(text)</p>
+                                @foreach (var text in doc.Highlights[obj].Highlights)
+                                {
+                                    <p class="category">@Html.Raw(text)</p>
+                                }
                             }
-                        }
+                        </div>
+                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
+                            <i class="material-icons">edit</i>
+                        </button>
                     </div>
                     <div class="card-footer">
                         <div class="stats">
                             @if (!String.IsNullOrEmpty(doc.Source.Tags))
                             {
                                 <i class="material-icons">access_time</i><span>
-                                    Tags: @doc.Source.LinkTags 
+                                    Tags: @doc.Source.LinkTags
                                 </span>
                             }
                             else
@@ -50,11 +59,10 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-char">
                         <div class="card-content">
-                            <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName"><h4 class="card-title">@doc.Source.FileName</h4></a>
+                            <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <i class="material-icons text-danger">warning</i>
                                 @if (!String.IsNullOrEmpty(doc.Source.Tags))
                                 {
                                     <i class="material-icons">access_time</i><span>Tags: @doc.Source.LinkTags</span>
