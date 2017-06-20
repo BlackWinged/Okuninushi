@@ -226,6 +226,9 @@ namespace Okunishushi.Models
         public string facebookId { get; set; }
         public string name { get; set; }
 
+        public int FacebookAuthId { get; set; }
+        public FacebookAuth parentAuth { get; set; }
+
         public List<FacebookGroupPost> posts { get; set; }
     }
 

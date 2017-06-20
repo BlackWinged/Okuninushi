@@ -17,15 +17,21 @@ namespace Okunishushi.Controllers
     public class GraphApiController : Controller
     {
 
-        public FileStreamResult downloadFile(string keyName)
+        public IActionResult saveAuthObject (FacebookAuth auth)
         {
-             
-            GetObjectResponse result = S3Connector.ReadObjectData(WebUtility.UrlEncode(keyName));
 
-            return new FileStreamResult(result.ResponseStream, new MediaTypeHeaderValue("text/plain"))
+            int? userId = HttpContext.Session.GetInt32("currentuser");
+            if (userId != null)
             {
-                FileDownloadName = keyName,
-            };
+                using (var db = new ClassroomContext())
+                {
+                    User currentUser = db.Users.Find(userId);
+                    auth.User = currentUser;
+                    db.FacebookAuthSet.Add(auth);
+                    db.SaveChanges();
+                }
+            }
+            return Content("success");
         }
 
     }

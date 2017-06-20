@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "About";
+    Layout = "_classroomLayout";
+}
+@model Nest.SearchResponse<Okunishushi.Models.Document>
+
+@section extraCss{
+    <link href="~/css/Search.css" rel="stylesheet" />
+}
+
+<div class="container-fluid">
+    <h3>Search results</h3>
+
+    <div class="row">
+        @foreach (Nest.Hit<Okunishushi.Models.Document> doc in Model.Hits.Take(3))
+        {
+            <div class="col-md-4">
+                <div class="card card-chart">
+                    <div class="card-content">
+                        <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName </h4></a>
+                        <div class="card-description">
+                            @foreach (var obj in doc.Highlights.Keys)
+                            {
+                                @foreach (var text in doc.Highlights[obj].Highlights)
+                                {
+                                    <p class="category">@Html.Raw(text)</p>
+                                }
+                            }
+                        </div>
+                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            @if (!String.IsNullOrEmpty(doc.Source.Tags))
+                            {
+                                <i class="material-icons">access_time</i><span>
+                                    Tags: @doc.Source.LinkTags
+                                </span>
+                            }
+                            else
+                            {
+                                <i class="material-icons">access_time</i><span>No tags</span>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @for (int i = 3; i < Model.Documents.Count(); i += 4)
+    {
+        <div class="row">
+            @foreach (Nest.Hit<Okunishushi.Models.Document> doc in Model.Hits.Skip(i).Take(4))
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-char">
+                        <div class="card-content">
+                            <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                @if (!String.IsNullOrEmpty(doc.Source.Tags))
+                                {
+                                    <i class="material-icons">access_time</i><span>Tags: @doc.Source.LinkTags</span>
+                                }
+                                else
+                                {
+                                    <i class="material-icons">access_time</i><span>No tags</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+
+</div>

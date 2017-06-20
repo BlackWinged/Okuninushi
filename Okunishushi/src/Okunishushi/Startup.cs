@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Okunishushi.Filters;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Http.Features;
+using Hangfire;
 
 namespace Okunishushi
 {
@@ -56,6 +57,8 @@ namespace Okunishushi
                 options.IdleTimeout = TimeSpan.FromHours(1);
                 options.CookieHttpOnly = true;
             });
+
+            services.AddHangfire(x => x.UseSqlServerStorage(@Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +98,10 @@ namespace Okunishushi
                 //    );
                 routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index" });
             });
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
+
             var webSocketOptions = new WebSocketOptions()
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(120),
