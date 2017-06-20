@@ -218,4 +218,39 @@ namespace Okunishushi.Models
         public int UserId { get; set; }
         public User User { get; set; }
     }
+
+    public class FaceboookGroup
+    {
+        public int Id { get; set; }
+        [JsonProperty(propertyName: "id")]
+        public string facebookId { get; set; }
+        public string name { get; set; }
+
+        public List<FacebookGroupPost> posts { get; set; }
+    }
+
+    public class FacebookGroupPost
+    {
+        public int Id { get; set; }
+        [JsonProperty(propertyName: "id")]
+        public string facebookId { get; set; }
+        public DateTime updated_time { get; set; }
+        public string message { get; set; }
+
+        public int FacebookGroupId { get; set; }
+        public FaceboookGroup parentGroup { get; set; }
+
+        public List<FacebookComment> comments { get; set; }
+    }
+
+    public class FacebookComment
+    {
+        public int Id { get; set; }
+        [JsonProperty(propertyName: "id")]
+        public string facebookId { get; set; }
+        public string message { get; set; }
+
+        public int FacebookGroupPostId { get; set; }
+        public FacebookGroupPost parentPost {get; set;}
+    }
 }

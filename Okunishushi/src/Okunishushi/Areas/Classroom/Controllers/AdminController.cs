@@ -105,7 +105,7 @@ namespace Okunishushi.Controllers
         {
             if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]))
             {
-                return Redirect("classroom/admin/newuser");
+                return Redirect("/classroom/admin/newuser");
             }
             using (var db = new ClassroomContext())
             {
