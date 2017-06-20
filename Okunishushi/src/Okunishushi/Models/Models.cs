@@ -18,6 +18,7 @@ namespace Okunishushi.Models
         public DbSet<Document> Documents { get; set; }
         public DbSet<ClassroomDocuments> ClassroomDocuments { get; set; }
         public DbSet<UserClassrooms> StudentClassrooms { get; set; }
+        public DbSet<FacebookAuth> FacebookAuthSet { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -204,5 +205,17 @@ namespace Okunishushi.Models
 
         public int DocumentId { get; set; }
         public Document Document { get; set; }
+    }
+
+    public class FacebookAuth
+    {
+        public int Id { get; set; }
+        public string accessToken { get; set; }
+        [JsonProperty(propertyName : "userID")]
+        public string facebookUserId { get; set; }
+        public int expiresIn { get; set; }
+        public string signedRequest { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }
