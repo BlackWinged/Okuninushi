@@ -77,16 +77,16 @@
                         </div>
                     </li>
 
-                    <li @(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")>
+                    <li @(ViewContext.RouteData.Values["Action"].ToString() == "ExternalAccounts" ? "active" : "")>
                         <a href="@Url.Action("ExternalAccounts", "homeroom")">
                             <i class="material-icons">location_on</i>
                             <p>Accounts</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="notifications.html">
+                    <li @(ViewContext.RouteData.Values["Action"].ToString() == "Groups" ? "active" : "")>
+                        <a href="@Url.Action("Groups", "homeroom")">
                             <i class="material-icons text-gray">notifications</i>
-                            <p>Notifications</p>
+                            <p>Groups</p>
                         </a>
                     </li>
                 </ul>

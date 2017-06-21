@@ -82,7 +82,7 @@ namespace Okunishushi.Connectors
                 }
 
                 var result = Client.IndexMany(db.Documents.ToList());
-                Client.Index<Document>(null);
+                result = Client.IndexMany(db.FacebookGroupPosts.ToList());
 
                 if (!result.IsValid)
                 {

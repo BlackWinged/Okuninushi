@@ -13,7 +13,7 @@ using Okunishushi.Helpers;
 
 namespace Okunishushi.Controllers
 {
-    //[AuthFilter]
+    [AuthFilter]
     [Area("classroom")]
     public class HomeRoomController : Controller
     {
@@ -101,6 +101,14 @@ namespace Okunishushi.Controllers
 
         public IActionResult ExternalAccounts()
         {
+            return View();
+        }
+
+        public IActionResult Groups()
+        {
+            FacebookConnector fb = new FacebookConnector(HttpContext.Session);
+            List<FaceboookGroup> groups = fb.getGroups();
+            List<FacebookGroupPost> posts = fb.getGroupFeed("302929356816829");
             return View();
         }
     }

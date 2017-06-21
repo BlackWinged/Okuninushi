@@ -26,8 +26,16 @@ namespace Okunishushi.Controllers
                 using (var db = new ClassroomContext())
                 {
                     User currentUser = db.Users.Find(userId);
+                    int? currAuth = db.FacebookAuthSet.Where(x => x.facebookUserId == auth.facebookUserId).Select(x => x.Id).SingleOrDefault();
+                    if (currAuth != null)
+                    {
+                        auth.Id = (int)currAuth;
+                        db.FacebookAuthSet.Update(auth);
+                    } else
+                    {
+                        db.FacebookAuthSet.Add(auth);
+                    }
                     auth.User = currentUser;
-                    db.FacebookAuthSet.Add(auth);
                     db.SaveChanges();
                 }
             }

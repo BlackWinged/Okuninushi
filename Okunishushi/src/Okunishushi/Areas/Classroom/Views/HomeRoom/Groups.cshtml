@@ -46,17 +46,15 @@
                 if (response.status === 'connected') {
                     console.log('Logged in.');
                     console.log(JSON.stringify(response));
-                    response.authResponse.facebookUserId = response.authResponse.userID;
                     $.post("/api/graphapi/saveAuthObject", response.authResponse, function () { }, "json" );
                 }
                 else {
                     FB.login(function (response) { 
                         if (response.authResponse) { 
                             console.log(JSON.stringify(response));
-                            response.authResponse.facebookUserId = response.authResponse.userID;
                             $.post("/api/graphapi/saveAuthObject", JSON.stringify(response.authResponse), function () { },"json" );
                         }
-                    }, { scope: "user_managed_groups" });
+                    });
                 }
             });
 
