@@ -19,6 +19,9 @@ namespace Okunishushi.Models
         public DbSet<ClassroomDocuments> ClassroomDocuments { get; set; }
         public DbSet<UserClassrooms> StudentClassrooms { get; set; }
         public DbSet<FacebookAuth> FacebookAuthSet { get; set; }
+        public DbSet<FaceboookGroup> FacebookGroups { get; set; }
+        public DbSet<FacebookGroupPost> FacebookGroupPosts { get; set; }
+        public DbSet<FacebookComment> FacebookComments { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

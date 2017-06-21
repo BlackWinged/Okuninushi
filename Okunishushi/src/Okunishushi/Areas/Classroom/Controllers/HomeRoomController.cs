@@ -98,5 +98,10 @@ namespace Okunishushi.Controllers
             em.fill();
             return Content("redone");
         }
+
+        public IActionResult ExternalAccounts()
+        {
+            return View();
+        }
     }
 }
