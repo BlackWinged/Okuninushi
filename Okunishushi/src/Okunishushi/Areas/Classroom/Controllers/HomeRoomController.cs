@@ -109,6 +109,16 @@ namespace Okunishushi.Controllers
             FacebookConnector fb = new FacebookConnector(HttpContext.Session);
             List<FaceboookGroup> groups = fb.getGroups();
             List<FacebookGroupPost> posts = fb.getGroupFeed("302929356816829");
+
+            using (var db = new ClassroomContext())
+            {
+                db.FacebookGroupPosts.UpdateRange(posts);
+                db.SaveChanges();
+            }
+
+            List<Document> documents = new List<Document>();
+
+            posts.ForEach(x => documents.Add(fb.convertToDocument(x)));
             return View();
         }
     }

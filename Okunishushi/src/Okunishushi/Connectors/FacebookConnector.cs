@@ -41,11 +41,32 @@ namespace Okunishushi.Connectors
 
         public List<FacebookGroupPost> getGroupFeed(string groupId)
         {
-            string requestString = groupId + "/feed";
-            requestString += "?access_token=" + currentUser.accessToken;
+            string requestString = groupId + "/feed?fields=permalink_url,description,message,from,comments{message,from}";
+            requestString += "&access_token=" + currentUser.accessToken;
+            FaceboookGroup group = new FaceboookGroup();
+            using (var db = new ClassroomContext())
+            {
+                group = db.FacebookGroups.Where(x => x.facebookId == groupId).SingleOrDefault();
+            }
             string resultRaw = fireGetRequest(requestString);
             JToken resultJson = JObject.Parse(resultRaw)["data"];
             List<FacebookGroupPost> result = JsonConvert.DeserializeObject<List<FacebookGroupPost>>(resultJson.ToString());
+            result.ForEach(x =>
+            {
+                x.comments = new List<FacebookComment>();
+                x.parentGroup = group;
+            });
+            foreach (JToken post in JObject.Parse(resultRaw)["data"])
+            {
+                if (post["comments"] != null)
+                {
+                    foreach (JToken comment in post["comments"]["data"])
+                    {
+                        FacebookComment newComment = JsonConvert.DeserializeObject<FacebookComment>(comment.ToString());
+                        result.Where(x => x.facebookId == post["id"].ToString()).ToList().ForEach(x => x.comments.Add(newComment));
+                    }
+                }
+            }
 
             return result;
         }
@@ -65,7 +86,29 @@ namespace Okunishushi.Connectors
 
         public Document convertToDocument(FacebookGroupPost post)
         {
-            return null;
+            Document result = new Document();
+            result.ExternalUrl = post.permalink_url;
+            string sentence = post.from.name + ": " + post.message + Environment.NewLine;
+            result.Content = sentence;
+            foreach (FacebookComment comment in post.comments)
+            {
+                sentence = comment.from.name + ": " + comment.message + Environment.NewLine;
+            }
+            return result;
+        }
+
+        public void syncGroups()
+        {
+            using (var db = new ClassroomContext())
+            {
+                List<FaceboookGroup> groups = db.FacebookGroups.ToList();
+                foreach (FaceboookGroup group in groups)
+                {
+                    List<FacebookGroupPost> posts = getGroupFeed(group.facebookId);
+
+                }
+
+            }
         }
     }
 }

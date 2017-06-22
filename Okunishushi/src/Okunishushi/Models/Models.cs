@@ -155,6 +155,7 @@ namespace Okunishushi.Models
     {
         public int Id { get; set; }
         public string FileName { get; set; }
+        public string ExternalUrl { get; set; }
         public string KeyName { get; set; }
         public string BucketName { get; set; }
         public string Tags { get; set; }
@@ -224,6 +225,7 @@ namespace Okunishushi.Models
 
     public class FaceboookGroup
     {
+        [JsonIgnore]
         public int Id { get; set; }
         [JsonProperty(propertyName: "id")]
         public string facebookId { get; set; }
@@ -237,6 +239,7 @@ namespace Okunishushi.Models
 
     public class FacebookGroupPost
     {
+        [JsonIgnore]
         public int Id { get; set; }
         [JsonProperty(propertyName: "id")]
         public string facebookId { get; set; }
@@ -246,11 +249,17 @@ namespace Okunishushi.Models
         public int FacebookGroupId { get; set; }
         public FaceboookGroup parentGroup { get; set; }
 
+        public int FacebookUserId { get; set; }
+        public FacebookUser from { get; set; }
+
+        public string permalink_url { get; set; }
+        [JsonIgnore]
         public List<FacebookComment> comments { get; set; }
     }
 
     public class FacebookComment
     {
+        [JsonIgnore]
         public int Id { get; set; }
         [JsonProperty(propertyName: "id")]
         public string facebookId { get; set; }
@@ -258,5 +267,19 @@ namespace Okunishushi.Models
 
         public int FacebookGroupPostId { get; set; }
         public FacebookGroupPost parentPost {get; set;}
+
+        public int FacebookUserId { get; set; }
+        public FacebookUser from { get; set; }
     }
+
+    public class FacebookUser
+    {
+        [JsonIgnore]
+        public int Id { get; set; }
+        [JsonProperty(propertyName: "id")]
+        public string facebookId { get; set; }
+        public string name { get; set; }
+
+    }
+
 }
