@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Okunishushi.Models;
 using Microsoft.AspNetCore.Http;
-using System.Net.WebSockets;
-using System.Threading;
-using Okunishushi.Connectors;
-using System.Net;
-using Microsoft.Net.Http.Headers;
-using Amazon.S3.Model;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Okunishushi.Controllers
 {
@@ -21,12 +17,24 @@ namespace Okunishushi.Controllers
         {
 
             int? userId = HttpContext.Session.GetInt32("currentuser");
+            dynamic stringResponse;
             if (userId != null)
             {
                 using (var db = new ClassroomContext())
                 {
+
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://graph.facebook.com/v2.9/");
+                        HttpResponseMessage response = client.GetAsync("oauth/access_token?grant_type=fb_exchange_token&client_id=" + Environment.GetEnvironmentVariable("FACEBOOK_APP_ID") + @"&client_secret=" + Environment.GetEnvironmentVariable("FACEBOOK_APP_SECRET") + @"&fb_exchange_token=" + auth.accessToken ).Result;
+                        response.EnsureSuccessStatusCode(); // Throw in not success
+
+                        stringResponse = JsonConvert.DeserializeObject<dynamic>(response.Content.ReadAsStringAsync().Result);
+                    }
+
                     User currentUser = db.Users.Find(userId);
                     int? currAuth = db.FacebookAuthSet.Where(x => x.facebookUserId == auth.facebookUserId).Select(x => x.Id).SingleOrDefault();
+                    auth.accessToken = stringResponse.access_token.ToString();
                     if (currAuth != null)
                     {
                         auth.Id = (int)currAuth;
