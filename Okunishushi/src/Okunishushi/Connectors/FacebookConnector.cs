@@ -39,10 +39,17 @@ namespace Okunishushi.Connectors
             return result;
         }
 
-        public List<FacebookGroupPost> getGroupFeed(string groupId)
+        public List<FacebookGroupPost> getGroupFeed(string groupId, FacebookAuth givenAuth = null)
         {
             string requestString = groupId + "/feed?fields=permalink_url,description,message,from,comments{message,from}";
-            requestString += "&access_token=" + currentUser.accessToken;
+            if (givenAuth != null)
+            {
+                requestString += "&access_token=" + givenAuth.accessToken;
+            }
+            else
+            {
+                requestString += "&access_token=" + currentUser.accessToken;
+            }
             FaceboookGroup group = new FaceboookGroup();
             using (var db = new ClassroomContext())
             {
@@ -104,7 +111,14 @@ namespace Okunishushi.Connectors
                 List<FaceboookGroup> groups = db.FacebookGroups.ToList();
                 foreach (FaceboookGroup group in groups)
                 {
-                    List<FacebookGroupPost> posts = getGroupFeed(group.facebookId);
+                    try
+                    {
+                        List<FacebookGroupPost> posts = getGroupFeed(group.facebookId, group.parentAuth);
+                    }
+                    catch (Exception ex)
+                    {
+                        //swallow
+                    }
 
                 }
 

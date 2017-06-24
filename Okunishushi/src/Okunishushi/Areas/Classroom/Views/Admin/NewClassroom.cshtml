@@ -5,7 +5,7 @@
 }
 @model Okunishushi.Models.Classroom
 
-<div class="container-fluid">
+<div class="container-fluid" id="classroom-container">
     <div class="row">
         <div class="col-md-6">
 
@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-content">
                     <h4 class="card-title">Create classroom</h4>
-                    <form method="post" action="/classroom/SaveNewClassroom">
+                    <form method="post" action="@Url.Action("SaveNewClassroom", "Admin")">
                         <input type="hidden" id ="id" name="id" value="@Model.Id" />
                         <div class="row">
                             <div class="col-md-5">
@@ -204,4 +204,49 @@
         $('.card .material-datatables label').addClass('form-group');
     }
 
+
+
+    var docVue = new Vue({
+        el: '#classroom-container',
+        data: {
+            id: 0,
+            docs: [],
+            currentDoc: {},
+            showContent: false,
+        },
+        computed: {
+            groupsVisible: function{
+                if (this.id != 0){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        watch: {
+            searchQuery: function (newId) {
+                this.getDoc(newId);
+            },
+        },
+        methods: {
+            getDoc: function (newId) {
+                var vm = this;
+                $.get("/api/documentapi/docdata?id=" + newId).
+                    done(function (data) {
+                        //var doc = JSON.parse(data);
+                        var count = 0;
+                        vm.docs.forEach(function (obj) {
+                            if (obj.keyName === data.keyName) {
+                                count = 1;
+                            }
+                        });
+                        if (!count) {
+                            vm.docs.push(data);
+                        }
+                    });
+            },
+        }
+    }
+
+        app.id = @Model.Id;
 </script>

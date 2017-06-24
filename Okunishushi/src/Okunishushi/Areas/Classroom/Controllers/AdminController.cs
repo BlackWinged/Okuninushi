@@ -18,7 +18,7 @@ namespace Okunishushi.Controllers
     public class AdminController : Controller
     {
 
-    
+
 
         public IActionResult Users()
         {
@@ -143,7 +143,7 @@ namespace Okunishushi.Controllers
         public IActionResult Documents()
         {
             //List<Document> files = GoogleDriveConnector.listFiles();
-            
+
             var db = new ClassroomContext();
             var files = db.Documents.ToList();
             return View(files);
@@ -198,9 +198,16 @@ namespace Okunishushi.Controllers
         {
             var db = new ClassroomContext();
             newRoom.OwnerId = SecurityHelper.currentUserId(HttpContext.Session);
-            db.Classrooms.Add(newRoom);
+            if (newRoom.Id == 0)
+            {
+                db.Classrooms.Add(newRoom);
+            }
+            else
+            {
+                db.Classrooms.Update(newRoom);
+            }
             db.SaveChanges();
-            return Redirect("/classroom/admin/newclassroom/"+ newRoom.Id); 
+            return Redirect(Url.Action("NewClassroom", "Admin") + "/" + newRoom.Id);
         }
 
     }
