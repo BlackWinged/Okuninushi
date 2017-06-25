@@ -126,6 +126,39 @@
         <!-- end col-md-12 -->
     </div>
     }
+
+    <div v-if="groupsVisible" class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Add or remove groups</h4>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
+                    <div class="list">
+                        <ul>
+                            <li v-for="groupset  in groups">
+                                <p>{{groupset.name}}</p>
+                                <ul v-if="groupset.groups.length > 0">
+                                    <li v-for="group in groupset.groups">
+                                        <b v-if="group.isAdded"><a href="javascript:void(0)" @@click="sendGroupData(groupset.name, group.id)">{{group.name}}</a></b>
+                                        <span v-if="!group.isAdded"><a href="javascript:void(0)" @@click="sendGroupData(groupset.name, group.id)">{{group.name}}</a></span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+
+        <!-- end col-md-12 -->
+    </div>
 </div>
 
 
@@ -206,47 +239,46 @@
 
 
 
-    var docVue = new Vue({
+    var app = new Vue({
         el: '#classroom-container',
         data: {
             id: 0,
-            docs: [],
-            currentDoc: {},
-            showContent: false,
+            groups: {}
         },
         computed: {
-            groupsVisible: function{
-                if (this.id != 0){
+            groupsVisible: function () {
+                if (this.id != 0) {
                     return true;
                 } else {
                     return false;
                 }
             }
         },
-        watch: {
-            searchQuery: function (newId) {
-                this.getDoc(newId);
-            },
-        },
         methods: {
-            getDoc: function (newId) {
+            getGroups: function () {
                 var vm = this;
-                $.get("/api/documentapi/docdata?id=" + newId).
+                $.get("/api/groupsapi/listGroupsBySource").
                     done(function (data) {
                         //var doc = JSON.parse(data);
-                        var count = 0;
-                        vm.docs.forEach(function (obj) {
-                            if (obj.keyName === data.keyName) {
-                                count = 1;
-                            }
-                        });
-                        if (!count) {
-                            vm.docs.push(data);
+                        vm.groups = data.groups;
+                    });
+            },
+            sendGroupData: function (groupset, groupid) {
+                var vm = this;
+                var data = {};
+                data.roomId = this.id;
+                data.groupset = groupset;
+                data.groupId = groupid;
+                $.post("/api/groupsapi/saveGroupToRoom", "roomId=" + data.roomId + "&" + "groupset=" + data.groupset + "&" + "groupId=" + data.groupId).
+                    done(function (data) {
+                        if (data == "success") {
+                            vm.getGroups();
                         }
                     });
             },
         }
-    }
+    });
 
-        app.id = @Model.Id;
+    app.id = @Model.Id;
+    app.getGroups();
 </script>

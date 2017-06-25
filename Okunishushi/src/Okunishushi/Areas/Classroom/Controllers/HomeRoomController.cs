@@ -107,7 +107,7 @@ namespace Okunishushi.Controllers
         public IActionResult Groups()
         {
             FacebookConnector fb = new FacebookConnector(HttpContext.Session);
-            List<FaceboookGroup> groups = fb.getGroups();
+            List<FacebookGroup> groups = fb.getGroups();
             List<FacebookGroupPost> posts = fb.getGroupFeed("302929356816829");
 
             using (var db = new ClassroomContext())

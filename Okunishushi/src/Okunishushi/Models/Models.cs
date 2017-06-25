@@ -19,7 +19,7 @@ namespace Okunishushi.Models
         public DbSet<ClassroomDocuments> ClassroomDocuments { get; set; }
         public DbSet<UserClassrooms> StudentClassrooms { get; set; }
         public DbSet<FacebookAuth> FacebookAuthSet { get; set; }
-        public DbSet<FaceboookGroup> FacebookGroups { get; set; }
+        public DbSet<FacebookGroup> FacebookGroups { get; set; }
         public DbSet<FacebookGroupPost> FacebookGroupPosts { get; set; }
         public DbSet<FacebookComment> FacebookComments { get; set; }
         //public DbSet<Post> Posts { get; set; }
@@ -223,7 +223,7 @@ namespace Okunishushi.Models
         public User User { get; set; }
     }
 
-    public class FaceboookGroup
+    public class FacebookGroup
     {
         [JsonIgnore]
         public int Id { get; set; }
@@ -233,6 +233,9 @@ namespace Okunishushi.Models
 
         public int FacebookAuthId { get; set; }
         public FacebookAuth parentAuth { get; set; }
+
+        public int ClassroomId { get; set; }
+        public Classroom attachedRoom { get; set; }
 
         public List<FacebookGroupPost> posts { get; set; }
     }
@@ -247,7 +250,7 @@ namespace Okunishushi.Models
         public string message { get; set; }
 
         public int FacebookGroupId { get; set; }
-        public FaceboookGroup parentGroup { get; set; }
+        public FacebookGroup parentGroup { get; set; }
 
         public int FacebookUserId { get; set; }
         public FacebookUser from { get; set; }

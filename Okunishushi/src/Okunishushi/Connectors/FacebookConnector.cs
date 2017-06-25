@@ -28,14 +28,14 @@ namespace Okunishushi.Connectors
             }
         }
 
-        public List<FaceboookGroup> getGroups()
+        public List<FacebookGroup> getGroups()
         {
             string requestString = currentUser.facebookUserId + "/groups";
             requestString += "?access_token=" + currentUser.accessToken;
             string resultRaw = fireGetRequest(requestString);
             JToken resultJson = JObject.Parse(resultRaw)["data"];
-            List<FaceboookGroup> result = JsonConvert.DeserializeObject<List<FaceboookGroup>>(resultJson.ToString());
-
+            List<FacebookGroup> result = JsonConvert.DeserializeObject<List<FacebookGroup>>(resultJson.ToString());
+            result.ForEach(x => x.parentAuth = currentUser);
             return result;
         }
 
@@ -50,7 +50,7 @@ namespace Okunishushi.Connectors
             {
                 requestString += "&access_token=" + currentUser.accessToken;
             }
-            FaceboookGroup group = new FaceboookGroup();
+            FacebookGroup group = new FacebookGroup();
             using (var db = new ClassroomContext())
             {
                 group = db.FacebookGroups.Where(x => x.facebookId == groupId).SingleOrDefault();
@@ -108,8 +108,8 @@ namespace Okunishushi.Connectors
         {
             using (var db = new ClassroomContext())
             {
-                List<FaceboookGroup> groups = db.FacebookGroups.ToList();
-                foreach (FaceboookGroup group in groups)
+                List<FacebookGroup> groups = db.FacebookGroups.ToList();
+                foreach (FacebookGroup group in groups)
                 {
                     try
                     {
