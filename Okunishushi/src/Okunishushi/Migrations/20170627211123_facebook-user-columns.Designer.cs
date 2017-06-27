@@ -8,9 +8,10 @@ using Okunishushi.Models;
 namespace Okunishushi.Migrations
 {
     [DbContext(typeof(ClassroomContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20170627211123_facebook-user-columns")]
+    partial class facebookusercolumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -153,8 +154,7 @@ namespace Okunishushi.Migrations
 
                     b.Property<string>("faceUserName");
 
-                    b.Property<string>("facebookId")
-                        .IsRequired();
+                    b.Property<string>("facebookId");
 
                     b.Property<string>("message");
 
@@ -163,8 +163,6 @@ namespace Okunishushi.Migrations
                     b.Property<DateTime>("updated_time");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("facebookId");
 
                     b.HasIndex("FacebookGroupId");
 

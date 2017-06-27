@@ -72,7 +72,9 @@
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
                                     <a href="@Url.Action("redoElastic", "homeroom")">Redoelastic</a>
                                 </li>
-
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
+                                    <a href="@Url.Action("buildJobs", "homeroom")">Redoelastic</a>
+                                </li>
                             </ul>
                         </div>
                     </li>

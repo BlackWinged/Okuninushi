@@ -102,6 +102,11 @@ namespace Okunishushi.Connectors
             Client.Index(doc);
         }
 
+        public void addManyDocuments(List<Document> doc)
+        {
+            Client.IndexMany(doc);
+        }
+
         public ISearchResponse<Document> search(string query)
         {
             var result = Client.Search<Document>(s => s

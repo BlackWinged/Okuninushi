@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Okunishushi.Models;
 using Microsoft.EntityFrameworkCore;
-using Google.Apis.Drive.v3;
+using Hangfire;
 using Okunishushi.Connectors;
 using Okunishushi.Filters;
 using Microsoft.AspNetCore.Http;
@@ -99,6 +99,12 @@ namespace Okunishushi.Controllers
             return Content("redone");
         }
 
+        public IActionResult buildJobs()
+        {
+            RecurringJob.AddOrUpdate(() => FacebookConnector.syncGroups(), Cron.Daily());
+            return Content("built");
+        }
+
         public IActionResult ExternalAccounts()
         {
             return View();
@@ -118,7 +124,7 @@ namespace Okunishushi.Controllers
 
             List<Document> documents = new List<Document>();
 
-            posts.ForEach(x => documents.Add(fb.convertToDocument(x)));
+
             return View();
         }
     }

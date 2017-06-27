@@ -72,6 +72,11 @@ namespace Okunishushi.Models
                 .HasOne(cd => cd.Document)
                 .WithMany(d => d.ClassroomsDocuments)
                 .HasForeignKey(cd => cd.DocumentId);
+
+            modelBuilder.Entity<FacebookGroupPost>()
+                .HasAlternateKey(x => x.facebookId);
+
+
         }
     }
     public class User
@@ -252,8 +257,24 @@ namespace Okunishushi.Models
         public int FacebookGroupId { get; set; }
         public FacebookGroup parentGroup { get; set; }
 
-        public int FacebookUserId { get; set; }
+        [NotMapped]
         public FacebookUser from { get; set; }
+
+        [JsonIgnore]
+        public string faceUserName {
+            get
+            {
+                return from.name;
+            }
+        }
+
+        [JsonIgnore]
+        public string faceUserId {
+            get
+            {
+                return from.facebookId;
+            }
+        }
 
         public string permalink_url { get; set; }
         [JsonIgnore]
@@ -271,8 +292,24 @@ namespace Okunishushi.Models
         public int FacebookGroupPostId { get; set; }
         public FacebookGroupPost parentPost {get; set;}
 
-        public int FacebookUserId { get; set; }
-        public FacebookUser from { get; set; }
+        [NotMapped]
+        public FacebookUser from {
+            get
+            {
+                var faceUser = new FacebookUser();
+                faceUser.name = faceUserName;
+                faceUser.facebookId = faceUserId;
+                return faceUser;
+            }
+            set
+            {
+                faceUserName = value.name;
+                faceUserId = value.facebookId;
+            }
+        }
+
+        public string faceUserName { get; set; }
+        public string faceUserId { get; set; }
     }
 
     public class FacebookUser
