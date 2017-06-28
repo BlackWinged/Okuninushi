@@ -161,6 +161,8 @@ namespace Okunishushi.Models
         public int Id { get; set; }
         public string FileName { get; set; }
         public string ExternalUrl { get; set; }
+        public string ExternalId { get; set; }
+        public string ExternalParentId { get; set; }
         public string KeyName { get; set; }
         public string BucketName { get; set; }
         public string Tags { get; set; }

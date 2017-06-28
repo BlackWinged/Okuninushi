@@ -123,8 +123,10 @@ namespace Okunishushi.Connectors
             if (!string.IsNullOrEmpty(post.message))
             {
                 Document result = new Document();
-                
+
                 result.ExternalUrl = post.permalink_url;
+                result.ExternalId = post.facebookId;
+                result.ExternalParentId = post.parentGroup.facebookId;
                 string sentence = post.from.name + ": " + post.message + Environment.NewLine;
                 result.Content = sentence;
                 foreach (FacebookComment comment in post.comments)
@@ -155,19 +157,23 @@ namespace Okunishushi.Connectors
                         try
                         {
                             List<FacebookGroupPost> posts = getGroupFeed(group.facebookId, group.parentAuth);
-                            //foreach (var post in posts)
-                            //{
 
-                            //        db.FacebookGroupPosts.Add(post);
-
-                            //}
-                            db.FacebookGroupPosts.RemoveRange( db.FacebookGroupPosts.ToList() );
+                            db.FacebookGroupPosts.RemoveRange(db.FacebookGroupPosts.ToList());
                             db.SaveChanges();
+
+                            var extantDocs = db.Documents.Where(x => x.ExternalId == group.facebookId);
+
+                            db.Documents.RemoveRange(extantDocs);
+
                             foreach (var post in posts)
                             {
-                                db.Documents.Remove(db.Documents.Where(x => x.ExternalUrl == post.permalink_url).FirstOrDefault());
+                                var convertedDoc = convertToDocument(post);
+
+                                if (convertedDoc != null)
+                                {
+                                    db.Documents.Add(convertToDocument(post));
+                                }
                             }
-                            db.Documents.AddRange(posts.Select(x => convertToDocument(x)).ToList());
                             db.SaveChanges();
 
                             db.FacebookGroupPosts.AddRange(posts);

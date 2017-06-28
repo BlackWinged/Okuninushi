@@ -8,9 +8,10 @@ using Okunishushi.Models;
 namespace Okunishushi.Migrations
 {
     [DbContext(typeof(ClassroomContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20170628064557_add_external_id_to_document")]
+    partial class add_external_id_to_document
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -62,8 +63,6 @@ namespace Okunishushi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExternalId");
-
-                    b.Property<string>("ExternalParentId");
 
                     b.Property<string>("ExternalUrl");
 
