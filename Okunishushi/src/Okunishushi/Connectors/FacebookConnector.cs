@@ -123,6 +123,7 @@ namespace Okunishushi.Connectors
             if (!string.IsNullOrEmpty(post.message))
             {
                 Document result = new Document();
+                
                 result.ExternalUrl = post.permalink_url;
                 string sentence = post.from.name + ": " + post.message + Environment.NewLine;
                 result.Content = sentence;
@@ -162,6 +163,13 @@ namespace Okunishushi.Connectors
                             //}
                             db.FacebookGroupPosts.RemoveRange( db.FacebookGroupPosts.ToList() );
                             db.SaveChanges();
+                            foreach (var post in posts)
+                            {
+                                db.Documents.Remove(db.Documents.Where(x => x.ExternalUrl == post.permalink_url).FirstOrDefault());
+                            }
+                            db.Documents.AddRange(posts.Select(x => convertToDocument(x)).ToList());
+                            db.SaveChanges();
+
                             db.FacebookGroupPosts.AddRange(posts);
                             db.SaveChanges();
                             finishedGroups.Add(group.facebookId);
@@ -173,7 +181,7 @@ namespace Okunishushi.Connectors
                     }
 
                 }
-                em.addManyDocuments(db.FacebookGroupPosts.Select(x => convertToDocument(x)).ToList());
+                em.addManyDocuments(db.Documents.Where(x => !string.IsNullOrEmpty(x.ExternalUrl)).ToList());
             }
         }
     }
