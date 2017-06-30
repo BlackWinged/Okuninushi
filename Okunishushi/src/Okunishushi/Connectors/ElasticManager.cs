@@ -84,16 +84,6 @@ namespace Okunishushi.Connectors
                 var result = Client.IndexMany(db.Documents.ToList());
                 result = Client.IndexMany(db.FacebookGroupPosts.ToList());
 
-                if (!result.IsValid)
-                {
-                    foreach (var item in result.ItemsWithErrors)
-                        Console.WriteLine("Failed to index document {0}: {1}", item.Id, item.Error);
-
-                    Console.WriteLine(result.DebugInformation);
-                    Console.Read();
-                    Environment.Exit(1);
-                }
-
             }
         }
 

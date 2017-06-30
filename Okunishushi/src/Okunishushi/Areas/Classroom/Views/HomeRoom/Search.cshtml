@@ -17,7 +17,14 @@
             <div class="col-md-4">
                 <div class="card card-chart">
                     <div class="card-content">
-                        <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName </h4></a>
+                        @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
+                        {
+                            <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
+                        }
+                        else
+                        {
+                            <a href="@doc.Source.ExternalUrl " rel="tooltip" title="Go to the original comment" target="_blank"><h4 class="card-title">Social network comment</h4></a>
+                        }
                         <div class="card-description">
                             @foreach (var obj in doc.Highlights.Keys)
                             {
@@ -27,9 +34,9 @@
                                 }
                             }
                         </div>
-                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
-                            <i class="material-icons">edit</i>
-                        </button>
+                        @*<button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
+                                <i class="material-icons">edit</i>
+                            </button>*@
                     </div>
                     <div class="card-footer">
                         <div class="stats">
@@ -59,7 +66,25 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-char">
                         <div class="card-content">
-                            <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
+                            @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
+                            {
+                                <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
+                            }
+                            else
+                            {
+                                <a href="@doc.Source.ExternalUrl " rel="tooltip" title="Go to the original comment" target="_blank"><h4 class="card-title">Social network comment</h4></a>
+                            }
+                            <div class="card-description">
+                                @foreach (var obj in doc.Highlights.Keys)
+                                {
+                                    @foreach (var text in doc.Highlights[obj].Highlights)
+                                    {
+                                        <p class="category">@Html.Raw(text)</p>
+                                        break;
+                                    }
+                                    break;
+                                }
+                            </div>
                         </div>
                         <div class="card-footer">
                             <div class="stats">

@@ -28,7 +28,7 @@ namespace Okunishushi.Controllers
             //    img.Add(ce.ExtractImages(true));
             //}
 
-            return Redirect("classroom/homeroom");
+            return View("Homepage");
         }
 
         public IActionResult About()

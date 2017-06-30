@@ -295,23 +295,25 @@ namespace Okunishushi.Models
         public FacebookGroupPost parentPost {get; set;}
 
         [NotMapped]
-        public FacebookUser from {
+        public FacebookUser from { get; set; }
+
+        [JsonIgnore]
+        public string faceUserName
+        {
             get
             {
-                var faceUser = new FacebookUser();
-                faceUser.name = faceUserName;
-                faceUser.facebookId = faceUserId;
-                return faceUser;
-            }
-            set
-            {
-                faceUserName = value.name;
-                faceUserId = value.facebookId;
+                return from.name;
             }
         }
 
-        public string faceUserName { get; set; }
-        public string faceUserId { get; set; }
+        [JsonIgnore]
+        public string faceUserId
+        {
+            get
+            {
+                return from.facebookId;
+            }
+        }
     }
 
     public class FacebookUser
