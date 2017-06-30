@@ -47,7 +47,7 @@ namespace Okunishushi.Connectors
             FacebookGroup group = new FacebookGroup();
             using (var db = new ClassroomContext())
             {
-                group = db.FacebookGroups.Where(x => x.facebookId == groupId).SingleOrDefault();
+                group = db.FacebookGroups.Where(x => x.id == groupId).SingleOrDefault();
             }
             string resultRaw = fireGetRequest(requestString);
             JToken resultJson = JObject.Parse(resultRaw)["data"];
@@ -64,7 +64,7 @@ namespace Okunishushi.Connectors
                     foreach (JToken comment in post["comments"]["data"])
                     {
                         FacebookComment newComment = JsonConvert.DeserializeObject<FacebookComment>(comment.ToString());
-                        result.Where(x => x.facebookId == post["id"].ToString()).ToList().ForEach(x => x.comments.Add(newComment));
+                        result.Where(x => x.id == post["id"].ToString()).ToList().ForEach(x => x.comments.Add(newComment));
                     }
                 }
             }
@@ -80,7 +80,7 @@ namespace Okunishushi.Connectors
             FacebookGroup group = new FacebookGroup();
             using (var db = new ClassroomContext())
             {
-                group = db.FacebookGroups.Where(x => x.facebookId == groupId).SingleOrDefault();
+                group = db.FacebookGroups.Where(x => x.id == groupId).SingleOrDefault();
             }
             string resultRaw = fireGetRequest(requestString);
             JToken resultJson = JObject.Parse(resultRaw)["data"];
@@ -97,7 +97,7 @@ namespace Okunishushi.Connectors
                     foreach (JToken comment in post["comments"]["data"])
                     {
                         FacebookComment newComment = JsonConvert.DeserializeObject<FacebookComment>(comment.ToString());
-                        result.Where(x => x.facebookId == post["id"].ToString()).ToList().ForEach(x => x.comments.Add(newComment));
+                        result.Where(x => x.id == post["id"].ToString()).ToList().ForEach(x => x.comments.Add(newComment));
                     }
                 }
             }
@@ -125,8 +125,8 @@ namespace Okunishushi.Connectors
                 Document result = new Document();
 
                 result.ExternalUrl = post.permalink_url;
-                result.ExternalId = post.facebookId;
-                result.ExternalParentId = post.parentGroup.facebookId;
+                result.ExternalId = post.id;
+                result.ExternalParentId = post.parentGroup.id;
                 string sentence = post.from.name + ": " + post.message + Environment.NewLine;
                 result.Content = sentence;
                 foreach (FacebookComment comment in post.comments)
@@ -152,16 +152,16 @@ namespace Okunishushi.Connectors
                                                     .ToList();
                 foreach (FacebookGroup group in groups)
                 {
-                    if (!finishedGroups.Contains(group.facebookId))
+                    if (!finishedGroups.Contains(group.id))
                     {
                         try
                         {
-                            List<FacebookGroupPost> posts = getGroupFeed(group.facebookId, group.parentAuth);
+                            List<FacebookGroupPost> posts = getGroupFeed(group.id, group.parentAuth);
 
                             db.FacebookGroupPosts.RemoveRange(db.FacebookGroupPosts.ToList());
                             db.SaveChanges();
 
-                            var extantDocs = db.Documents.Where(x => x.ExternalId == group.facebookId);
+                            var extantDocs = db.Documents.Where(x => x.ExternalId == group.id);
 
                             db.Documents.RemoveRange(extantDocs);
 
@@ -178,7 +178,7 @@ namespace Okunishushi.Connectors
 
                             db.FacebookGroupPosts.AddRange(posts);
                             db.SaveChanges();
-                            finishedGroups.Add(group.facebookId);
+                            finishedGroups.Add(group.id);
                         }
                         catch (Exception ex)
                         {

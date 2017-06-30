@@ -73,9 +73,6 @@ namespace Okunishushi.Models
                 .WithMany(d => d.ClassroomsDocuments)
                 .HasForeignKey(cd => cd.DocumentId);
 
-            modelBuilder.Entity<FacebookGroupPost>()
-                .HasAlternateKey(x => x.facebookId);
-
 
         }
     }
@@ -158,7 +155,7 @@ namespace Okunishushi.Models
 
     public class Document
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FileName { get; set; }
         public string ExternalUrl { get; set; }
         public string ExternalId { get; set; }
@@ -209,12 +206,12 @@ namespace Okunishushi.Models
 
     public class ClassroomDocuments
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }
 
-        public int DocumentId { get; set; }
+        public string DocumentId { get; set; }
         public Document Document { get; set; }
     }
 
@@ -232,10 +229,7 @@ namespace Okunishushi.Models
 
     public class FacebookGroup
     {
-        [JsonIgnore]
-        public int Id { get; set; }
-        [JsonProperty(propertyName: "id")]
-        public string facebookId { get; set; }
+        public string id { get; set; }
         public string name { get; set; }
 
         public int FacebookAuthId { get; set; }
@@ -249,10 +243,7 @@ namespace Okunishushi.Models
 
     public class FacebookGroupPost
     {
-        [JsonIgnore]
-        public int Id { get; set; }
-        [JsonProperty(propertyName: "id")]
-        public string facebookId { get; set; }
+        public string id { get; set; }
         public DateTime updated_time { get; set; }
         public string message { get; set; }
 
@@ -274,7 +265,7 @@ namespace Okunishushi.Models
         public string faceUserId {
             get
             {
-                return from.facebookId;
+                return from.id;
             }
         }
 
@@ -285,41 +276,37 @@ namespace Okunishushi.Models
 
     public class FacebookComment
     {
-        [JsonIgnore]
-        public int Id { get; set; }
-        [JsonProperty(propertyName: "id")]
-        public string facebookId { get; set; }
+        public string id { get; set; }
         public string message { get; set; }
 
         public int FacebookGroupPostId { get; set; }
         public FacebookGroupPost parentPost {get; set;}
 
         [NotMapped]
-        public FacebookUser from {
+        public FacebookUser from { get; set; }
+
+        [JsonIgnore]
+        public string faceUserName
+        {
             get
             {
-                var faceUser = new FacebookUser();
-                faceUser.name = faceUserName;
-                faceUser.facebookId = faceUserId;
-                return faceUser;
-            }
-            set
-            {
-                faceUserName = value.name;
-                faceUserId = value.facebookId;
+                return from.name;
             }
         }
 
-        public string faceUserName { get; set; }
-        public string faceUserId { get; set; }
+        [JsonIgnore]
+        public string faceUserId
+        {
+            get
+            {
+                return from.id;
+            }
+        }
     }
 
     public class FacebookUser
     {
-        [JsonIgnore]
-        public int Id { get; set; }
-        [JsonProperty(propertyName: "id")]
-        public string facebookId { get; set; }
+        public string id { get; set; }
         public string name { get; set; }
 
     }

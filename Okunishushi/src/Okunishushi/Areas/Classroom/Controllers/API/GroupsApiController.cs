@@ -27,8 +27,8 @@ namespace Okunishushi.Controllers
                 {
                     var group = new SerializeableSingleGroup();
                     group.Name = x.name;
-                    group.Id = x.facebookId;
-                    if (db.FacebookGroups.Where(y => y.facebookId == x.facebookId).Count() != 0)
+                    group.Id = x.id;
+                    if (db.FacebookGroups.Where(y => y.id == x.id).Count() != 0)
                     {
                         group.isAdded = true;
                     } else
@@ -51,16 +51,16 @@ namespace Okunishushi.Controllers
                     var faceGroup = new FacebookGroup();
                     var fb = new FacebookConnector(HttpContext.Session);
                     var fbGroups = fb.getGroups();
-                    faceGroup = fbGroups.Where(x => x.facebookId == groupid).FirstOrDefault();
+                    faceGroup = fbGroups.Where(x => x.id == groupid).FirstOrDefault();
                     faceGroup.ClassroomId = roomId;
-                    if (db.FacebookGroups.Where(x=>x.facebookId == groupid && x.ClassroomId == roomId).Count() == 0)
+                    if (db.FacebookGroups.Where(x=>x.id == groupid && x.ClassroomId == roomId).Count() == 0)
                     {
                         db.FacebookAuthSet.Update(faceGroup.parentAuth);
                         db.FacebookGroups.Add(faceGroup);
                     } else
                     {
                         
-                        db.FacebookGroups.Remove(db.FacebookGroups.Where(x => x.facebookId == groupid && x.ClassroomId == roomId).First());
+                        db.FacebookGroups.Remove(db.FacebookGroups.Where(x => x.id == groupid && x.ClassroomId == roomId).First());
                     }
                 }
 
