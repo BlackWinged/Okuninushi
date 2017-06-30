@@ -129,10 +129,12 @@ namespace Okunishushi.Connectors
                 result.ExternalParentId = post.parentGroup.id;
                 string sentence = post.from.name + ": " + post.message + Environment.NewLine;
                 result.Content = sentence;
+                sentence = "";
                 foreach (FacebookComment comment in post.comments)
                 {
-                    sentence = comment.from.name + ": " + comment.message + Environment.NewLine;
+                    sentence += comment.from.name + ": " + comment.message + Environment.NewLine;
                 }
+                result.Content += sentence;
                 return result;
             }
             return null;
@@ -161,7 +163,7 @@ namespace Okunishushi.Connectors
                             db.FacebookGroupPosts.RemoveRange(db.FacebookGroupPosts.ToList());
                             db.SaveChanges();
 
-                            var extantDocs = db.Documents.Where(x => x.ExternalId == group.id);
+                            var extantDocs = db.Documents.Where(x => x.ExternalParentId == group.facebookId);
 
                             db.Documents.RemoveRange(extantDocs);
 
@@ -187,7 +189,7 @@ namespace Okunishushi.Connectors
                     }
 
                 }
-                em.addManyDocuments(db.Documents.Where(x => !string.IsNullOrEmpty(x.ExternalUrl)).ToList());
+                em.fill();
             }
         }
     }
