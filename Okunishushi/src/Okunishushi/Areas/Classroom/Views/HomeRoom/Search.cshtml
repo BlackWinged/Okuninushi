@@ -19,6 +19,12 @@
                     <div class="card-content">
                         @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
                         {
+                            <a href="@Url.Action("Documents", "Admin",  new { id = doc.Source.Id } )" class="btn search-edit btn-simple" rel="tooltip" data-placement="bottom" title="Edit document">
+                                <i class="material-icons">edit</i>
+                            </a>
+                        }
+                        @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
+                        {
                             <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>
                         }
                         else
@@ -66,6 +72,12 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-char">
                         <div class="card-content">
+                            @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
+                            {
+                                <a href="@Url.Action("Documents", "Admin",  new { id = doc.Source.Id } )" class="btn search-edit btn-simple" rel="tooltip" data-placement="bottom" title="Edit document">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            }
                             @if (string.IsNullOrEmpty(doc.Source.ExternalUrl))
                             {
                                 <a href="/api/documentapi/downloadFile?keyname=@doc.Source.KeyName" rel="tooltip" title="@doc.Source.FileName"><h4 class="card-title">@doc.Source.FileName</h4></a>

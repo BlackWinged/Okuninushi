@@ -111,7 +111,7 @@ namespace Okunishushi.Controllers
             };
         }
 
-        public IActionResult docdata(int id)
+        public IActionResult docdata(string id)
         {
             using (var db = new ClassroomContext())
             {

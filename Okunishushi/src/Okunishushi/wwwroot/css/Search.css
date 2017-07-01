@@ -5,3 +5,10 @@
 .card-title {
     overflow: hidden;
 }
+
+
+.search-edit {
+    float: right;
+    padding: 0px;
+    margin: 8px;
+}

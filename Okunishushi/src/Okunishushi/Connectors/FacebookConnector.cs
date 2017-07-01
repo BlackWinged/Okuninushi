@@ -163,7 +163,7 @@ namespace Okunishushi.Connectors
                             db.FacebookGroupPosts.RemoveRange(db.FacebookGroupPosts.ToList());
                             db.SaveChanges();
 
-                            var extantDocs = db.Documents.Where(x => x.ExternalParentId == group.facebookId);
+                            var extantDocs = db.Documents.Where(x => x.ExternalParentId == group.id);
 
                             db.Documents.RemoveRange(extantDocs);
 
@@ -188,8 +188,11 @@ namespace Okunishushi.Connectors
                         }
                     }
 
+                    var docPosts = db.Documents.Where(x => x.ExternalParentId == group.id).ToList();
+                    docPosts.ForEach(x => x.Id = x.ExternalId);
+                    em.addManyDocuments(docPosts);
                 }
-                em.fill();
+                //em.fill();
             }
         }
     }

@@ -8,8 +8,8 @@ using Okunishushi.Models;
 namespace Okunishushi.Migrations
 {
     [DbContext(typeof(ClassroomContext))]
-    [Migration("20170622205939_remove-keys")]
-    partial class removekeys
+    [Migration("20170630184109_db-rebuild")]
+    partial class dbrebuild
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,9 +41,9 @@ namespace Okunishushi.Migrations
                 {
                     b.Property<int>("ClassroomId");
 
-                    b.Property<int>("DocumentId");
+                    b.Property<string>("DocumentId");
 
-                    b.Property<int>("Id");
+                    b.Property<string>("Id");
 
                     b.HasKey("ClassroomId", "DocumentId");
 
@@ -54,13 +54,17 @@ namespace Okunishushi.Migrations
 
             modelBuilder.Entity("Okunishushi.Models.Document", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("BucketName");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExternalId");
+
+                    b.Property<string>("ExternalParentId");
 
                     b.Property<string>("ExternalUrl");
 
@@ -101,84 +105,62 @@ namespace Okunishushi.Migrations
 
             modelBuilder.Entity("Okunishushi.Models.FacebookComment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("FacebookGroupPostId");
 
-                    b.Property<int>("FacebookUserId");
-
-                    b.Property<string>("facebookId");
-
                     b.Property<string>("message");
 
-                    b.HasKey("Id");
+                    b.Property<string>("parentPostid");
 
-                    b.HasIndex("FacebookGroupPostId");
+                    b.HasKey("id");
 
-                    b.HasIndex("FacebookUserId");
+                    b.HasIndex("parentPostid");
 
                     b.ToTable("FacebookComments");
                 });
 
+            modelBuilder.Entity("Okunishushi.Models.FacebookGroup", b =>
+                {
+                    b.Property<string>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ClassroomId");
+
+                    b.Property<int>("FacebookAuthId");
+
+                    b.Property<string>("name");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.HasIndex("FacebookAuthId");
+
+                    b.ToTable("FacebookGroups");
+                });
+
             modelBuilder.Entity("Okunishushi.Models.FacebookGroupPost", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("FacebookGroupId");
 
-                    b.Property<int>("FacebookUserId");
-
-                    b.Property<string>("facebookId");
-
                     b.Property<string>("message");
 
-                    b.Property<int?>("parentGroupId");
+                    b.Property<string>("parentGroupid");
 
                     b.Property<string>("permalink_url");
 
                     b.Property<DateTime>("updated_time");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.HasIndex("FacebookUserId");
-
-                    b.HasIndex("parentGroupId");
+                    b.HasIndex("parentGroupid");
 
                     b.ToTable("FacebookGroupPosts");
-                });
-
-            modelBuilder.Entity("Okunishushi.Models.FacebookUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("facebookId");
-
-                    b.Property<string>("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FacebookUser");
-                });
-
-            modelBuilder.Entity("Okunishushi.Models.FaceboookGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("FacebookAuthId");
-
-                    b.Property<string>("facebookId");
-
-                    b.Property<string>("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacebookAuthId");
-
-                    b.ToTable("FacebookGroups");
                 });
 
             modelBuilder.Entity("Okunishushi.Models.Role", b =>
@@ -292,33 +274,27 @@ namespace Okunishushi.Migrations
                 {
                     b.HasOne("Okunishushi.Models.FacebookGroupPost", "parentPost")
                         .WithMany("comments")
-                        .HasForeignKey("FacebookGroupPostId")
+                        .HasForeignKey("parentPostid");
+                });
+
+            modelBuilder.Entity("Okunishushi.Models.FacebookGroup", b =>
+                {
+                    b.HasOne("Okunishushi.Models.Classroom", "attachedRoom")
+                        .WithMany()
+                        .HasForeignKey("ClassroomId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Okunishushi.Models.FacebookUser", "from")
+                    b.HasOne("Okunishushi.Models.FacebookAuth", "parentAuth")
                         .WithMany()
-                        .HasForeignKey("FacebookUserId")
+                        .HasForeignKey("FacebookAuthId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Okunishushi.Models.FacebookGroupPost", b =>
                 {
-                    b.HasOne("Okunishushi.Models.FacebookUser", "from")
-                        .WithMany()
-                        .HasForeignKey("FacebookUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Okunishushi.Models.FaceboookGroup", "parentGroup")
+                    b.HasOne("Okunishushi.Models.FacebookGroup", "parentGroup")
                         .WithMany("posts")
-                        .HasForeignKey("parentGroupId");
-                });
-
-            modelBuilder.Entity("Okunishushi.Models.FaceboookGroup", b =>
-                {
-                    b.HasOne("Okunishushi.Models.FacebookAuth", "parentAuth")
-                        .WithMany()
-                        .HasForeignKey("FacebookAuthId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("parentGroupid");
                 });
 
             modelBuilder.Entity("Okunishushi.Models.UserClassrooms", b =>

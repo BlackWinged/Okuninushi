@@ -35,7 +35,7 @@ namespace Okunishushi.Controllers
                     User currentUser = db.Users.Find(userId);
                     int? currAuth = db.FacebookAuthSet.Where(x => x.facebookUserId == auth.facebookUserId).Select(x => x.Id).SingleOrDefault();
                     auth.accessToken = stringResponse.access_token.ToString();
-                    if (currAuth != null)
+                    if (currAuth != 0)
                     {
                         auth.Id = (int)currAuth;
                         db.FacebookAuthSet.Update(auth);

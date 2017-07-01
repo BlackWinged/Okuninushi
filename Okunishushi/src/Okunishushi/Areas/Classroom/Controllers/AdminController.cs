@@ -140,13 +140,10 @@ namespace Okunishushi.Controllers
             return Redirect("users");
         }
 
-        public IActionResult Documents()
+        public IActionResult Documents(string id)
         {
-            //List<Document> files = GoogleDriveConnector.listFiles();
 
-            var db = new ClassroomContext();
-            var files = db.Documents.ToList();
-            return View(files);
+            return View("Documents", id);
         }
 
         public IActionResult uploadFiles()

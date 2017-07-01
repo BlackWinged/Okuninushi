@@ -2,18 +2,16 @@
     ViewData["Title"] = "Documents";
     Layout = "_classroomLayout";
 }
-@model List<Okunishushi.Models.Document>
 
-<div class="container-fluid doctable">
-    <div class="card">
+<div  class="container-fluid doctable">
+    <div v-if="canonicalDoc == ''" class="card">
         <form action="/api/documentapi/uploaddocuments"
               class="dropzone"
               id="my-awesome-dropzone"></form>
     </div>
 
 
-    <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" v-if="canonicalDoc == ''">
             <div class="card">
                 <div class="card-header card-header-icon" data-background-color="purple">
                     <i class="material-icons">assignment</i>
@@ -71,9 +69,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row" v-if="showContent">
-        <div class="col-md-6">
+
+
+        <div class="col-md-6" v-if="showContent">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
                     <h4 class="title">Simple Table</h4>
@@ -95,7 +93,7 @@
             </div>
         </div>
     </div>
-</div>
+    
 
 
 <!-- component template -->
@@ -165,11 +163,20 @@
                 docs: [],
                 currentDoc: {},
                 showContent: false,
+                canonicalDoc: 0
             },
             watch: {
-                searchQuery: function (newId) {
-                    this.getDoc(newId);
+                canonicalDoc: function (newId) {
+                    if (newId != "") {
+                        this.getDoc(newId);
+                    }
+                    
                 },
+                docs: function () {
+                    if (this.canonicalDoc != "") {
+                        this.getDocumentData(this.canonicalDoc);
+                    }
+                }
             },
             methods: {
                 getDoc: function (newId) {
@@ -198,7 +205,7 @@
                 getDocumentData: function (e) {
                     var vinstance = this;
                     this.docs.forEach(function (obj) {
-                        if (obj.id === parseInt(e)) {
+                        if (obj.id === e) {
                             vinstance.currentDoc = obj;
                         }
                     });
@@ -217,11 +224,11 @@
             },
         });
         $("#my-awesome-dropzone").dropzone({ url: "/api/documentapi/uploaddocuments" });
-
+        docVue.canonicalDoc = "@Model";
         var myDropzone = Dropzone.forElement("#my-awesome-dropzone");
-        myDropzone.on("success", function (file, message) {
-            docVue.searchQuery = message;
-        });
+            myDropzone.on("success", function (file, message) {
+                docVue.searchQuery = message;
+            });
     });
 
 </script>

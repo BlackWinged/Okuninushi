@@ -64,16 +64,16 @@
                                     <a href="@Url.Action("roles", "admin")">User roles</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "documents" ? "active" : "")">
-                                    <a href="@Url.Action("documents","admin")">Documents</a>
+                                    <a href="@Url.Action("documents","admin", new { id = ""})">Documents</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "classrooms" ? "active" : "")">
                                     <a href="@Url.Action("classrooms", "admin")">Rooms</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
-                                    <a href="@Url.Action("redoElastic", "homeroom")">Redoelastic</a>
+                                    <a href="@Url.Action("redoElastic", "homeroom")">Redo elastic</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
-                                    <a href="@Url.Action("buildJobs", "homeroom")">Redoelastic</a>
+                                    <a href="@Url.Action("buildJobs", "homeroom")">Rebuild jobs</a>
                                 </li>
                             </ul>
                         </div>
