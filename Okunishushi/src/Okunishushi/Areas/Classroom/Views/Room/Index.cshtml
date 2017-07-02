@@ -1,4 +1,4 @@
-﻿@model List<Okunishushi.Models.Classroom>
+﻿@model Okunishushi.Models.Classroom
 @{
     ViewData["Title"] = "Room";
     Layout = "_classroomLayout";
@@ -6,32 +6,7 @@
 
 
 @section customMenu{
-<ul class="nav">
-    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
-        <a href="/classroom/">
-            <i class="material-icons">dashboard</i>
-            <p>Room dashboard</p>
-        </a>
-    </li>
-    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Room" ? "active" : "")">
-        <a href="/classroom/">
-            <i class="material-icons">dashboard</i>
-            <p>Dashboard</p>
-        </a>
-    </li>
-    <li @(ViewContext.RouteData.Values["Action"].ToString() == "ExternalAccounts" ? "active" : "")>
-        <a href="@Url.Action("Documents", "Room")">
-            <i class="material-icons">location_on</i>
-            <p>Documents</p>
-        </a>
-    </li>
-    <li @(ViewContext.RouteData.Values["Action"].ToString() == "Groups" ? "active" : "")>
-        <a href="@Url.Action("Groups", "homeroom")">
-            <i class="material-icons text-gray">notifications</i>
-            <p>Groups</p>
-        </a>
-    </li>
-</ul>
+    @Html.Partial("_InRoomMenu", new { roomId = Model.Id });
     }
 
 <div class="container-fluid">

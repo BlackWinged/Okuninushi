@@ -21,8 +21,10 @@ namespace Okunishushi.Controllers
 
         public IActionResult Index(int id)
         {
-            
-            return View();
+            using (var db = new ClassroomContext())
+            {
+                return View(db.Classrooms.Find(id));
+            }
         }
 
         public IActionResult Documents(int id)
