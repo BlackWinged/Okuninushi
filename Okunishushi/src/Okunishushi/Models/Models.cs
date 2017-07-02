@@ -166,6 +166,7 @@ namespace Okunishushi.Models
         public string GoogleTags { get; set; }
         [Column(TypeName = "nvarchar(max)")]
         public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [NotMapped]
         [JsonIgnore]

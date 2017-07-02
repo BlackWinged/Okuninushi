@@ -22,8 +22,6 @@ namespace Okunishushi.Controllers
 
         public IActionResult Users()
         {
-            ElasticManager ec = new ElasticManager();
-            var result = ec.search("tag");
             List<User> allUsers = new List<Models.User>();
             using (var db = new ClassroomContext())
             {
@@ -103,19 +101,18 @@ namespace Okunishushi.Controllers
         [HttpPost]
         public IActionResult NewUserSave(User user)
         {
-            if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]))
+            if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]) )
             {
                 return Redirect("/classroom/admin/newuser");
             }
             using (var db = new ClassroomContext())
             {
-                if (user.Id != 0)
-                {
-                    user = db.Users.Single(r => r.Id == user.Id);
-                }
-                else
+                if (user.Id == 0)
                 {
                     db.Users.Add(user);
+                } else
+                {
+                    db.Users.Update(user);
                 }
                 db.SaveChanges();
                 var roles = db.Roles;

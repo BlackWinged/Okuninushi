@@ -5643,6 +5643,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.1" />
     <PackageReference Include="NEST" Version="5.4.0" />
     <PackageReference Include="Xfinium.Pdf.NetCore" Version="6.8.0.2" />
   </ItemGroup>
@@ -5663,6 +5664,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ViewModels\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\css\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\images\" />
     <Folder Include="wwwroot\examples\forms\css\css\css\css\css\css\css\js\" />
