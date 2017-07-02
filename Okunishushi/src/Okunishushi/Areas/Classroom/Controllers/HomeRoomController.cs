@@ -10,6 +10,7 @@ using Okunishushi.Connectors;
 using Okunishushi.Filters;
 using Microsoft.AspNetCore.Http;
 using Okunishushi.Helpers;
+using Okunishushi.Enums;
 
 namespace Okunishushi.Controllers
 {
@@ -20,7 +21,13 @@ namespace Okunishushi.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<Classroom> result = new List<Classroom>();
+            int? userId = HttpContext.Session.GetInt32(EnumStrings.currentuser);
+            using (var db = new ClassroomContext())
+            {
+                result = db.Classrooms.Where(x => x.StudentClassrooms.Where(y => y.UserId == userId).Count() > 0 || x.OwnerId == userId).ToList();
+            }
+            return View(result);
         }
 
         public IActionResult About()

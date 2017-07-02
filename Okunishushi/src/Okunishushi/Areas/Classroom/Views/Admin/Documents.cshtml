@@ -166,6 +166,9 @@
                 canonicalDoc: 0
             },
             watch: {
+                searchQuery: function (newId) {
+                    this.getDoc(newId);
+                    },
                 canonicalDoc: function (newId) {
                     if (newId != "") {
                         this.getDoc(newId);
