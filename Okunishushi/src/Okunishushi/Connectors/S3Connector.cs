@@ -1,45 +1,34 @@
 ﻿using System;
 using Amazon.S3;
 using Amazon.S3.Model;
-
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Okunishushi.Connectors
 {
     public class S3Connector
     {
 
-        static string bucketName = "*** bucket name ***";
-        static string keyName = "*** key name when object is created ***";
-        static string filePath = "*** absolute path to a sample file to upload ***";
-
         static IAmazonS3 client;
 
-        static async void WritingAnObject()
+        public static async Task<PutObjectResponse> UploadObject(string filename, Stream file, string keyName, string contentType = "text/plain", string bucketName = "classroom-test")
         {
+            if (client == null)
+            {
+                client = client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1);
+            }
             try
             {
-                
-                PutObjectRequest putRequest1 = new PutObjectRequest
+                PutObjectRequest putRequest = new PutObjectRequest
                 {
                     BucketName = bucketName,
                     Key = keyName,
-                    ContentBody = "sample text"
+                    InputStream = file,
+                    ContentType = contentType
                 };
 
-                PutObjectResponse test = await client.PutObjectAsync(putRequest1);
-
-                // 2. Put object-set ContentType and add metadata.
-                PutObjectRequest putRequest2 = new PutObjectRequest
-                {
-                    BucketName = bucketName,
-                    Key = keyName,
-                    FilePath = filePath,
-                    ContentType = "text/plain"
-                };
-                putRequest2.Metadata.Add("x-amz-meta-title", "someTitle");
-
-                //PutObjectResponse response2 = client.PutObject(putRequest2);
-
+                PutObjectResponse test = await client.PutObjectAsync(putRequest);
+                return test;
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -59,7 +48,25 @@ namespace Okunishushi.Connectors
                         , amazonS3Exception.Message);
                 }
             }
+
+            return null;
         }
 
+        public static GetObjectResponse ReadObjectData(string keyName, string bucketName = "classroom-test")
+        {
+            using (client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1))
+            {
+
+                GetObjectRequest request = new GetObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = keyName
+                };
+
+                GetObjectResponse result = client.GetObjectAsync(request).Result;
+
+                return result;
+            }
+        }
     }
 }

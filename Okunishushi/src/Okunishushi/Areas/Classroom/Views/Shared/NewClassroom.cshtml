@@ -1,0 +1,284 @@
+﻿@using System.Net;
+@{
+    ViewData["Title"] = "New Classroom";
+    Layout = "_classroomLayout";
+}
+@model Okunishushi.Models.Classroom
+
+<div class="container-fluid" id="classroom-container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="rose">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Create classroom</h4>
+                    <form method="post" action="@Url.Action("SaveNewClassroom", "Admin")">
+                        <input type="hidden" id ="id" name="id" value="@Model.Id" />
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Class Name</label>
+                                    <input type="text" class="form-control" name="classname" value="@Model.ClassName">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Tags</label>
+                                    <input type="text" class="form-control" name="tags" value="@Model.Tags">
+                                </div>
+                            </div>
+                           </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>About the room</label>
+                                    <div class="form-group label-floating">
+                                        <label class="control-label"> Type up your description, pretty please?</label>
+                                        <textarea class="form-control" name="description" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary pull-right">Update Room</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Id != 0)
+    {
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Current students</h4>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
+                    <div class="material-datatables">
+                        <table id="students" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th class="disabled-sorting text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">All students</h4>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
+                    <div class="material-datatables">
+                        <table id="all_students" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th class="disabled-sorting text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+
+        <!-- end col-md-12 -->
+    </div>
+    }
+
+    <div v-if="groupsVisible" class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Add or remove groups</h4>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
+                    <div class="list">
+                        <ul>
+                            <li v-for="groupset  in groups">
+                                <p>{{groupset.name}}</p>
+                                <ul v-if="groupset.groups.length > 0">
+                                    <li v-for="group in groupset.groups">
+                                        <b v-if="group.isAdded"><a href="javascript:void(0)" @@click="sendGroupData(groupset.name, group.id)">{{group.name}}</a></b>
+                                        <span v-if="!group.isAdded"><a href="javascript:void(0)" @@click="sendGroupData(groupset.name, group.id)">{{group.name}}</a></span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+
+        <!-- end col-md-12 -->
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        setupDatatable("#students", $("#id").val(), "student", false);
+        setupDatatable("#all_students", $("#id").val(), "student");
+    });
+
+
+    function setupDatatable(tableId, classroomId, role, isAdder = true) {
+        var addButton = "<button type='button' rel='tooltip' class='btn btn-success add' data-original-title='' title=''><i class='material-icons'> edit</i></button>";
+        var removeButton = "<button type='button' rel='tooltip' class='btn btn-danger remove' data-original-title='' title=''><i class='material-icons'> close</i></button>";
+
+        var button;
+        if (isAdder) {
+            button = addButton;
+        } else {
+            button = removeButton;
+        }
+        $(tableId).DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                url: "/api/userapi/users",
+                data: {
+                    id: parseInt(classroomId),
+                    role: role,
+                    adding: isAdder
+                }
+            },
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search records",
+            },
+            columnDefs: [{
+                targets: -1,
+                data: null,
+                defaultContent: button,
+                className: "text-right"
+            }]
+        });
+
+        var table = $(tableId).DataTable();
+
+        // Edit record
+        table.on('click', '.add', function () {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+
+            $.get("/api/userapi/addUserToClassroom", { id: $("#id").val(), userId: data[0] })
+                .done(function () {
+                    $(".table").DataTable().ajax.reload(null, true);
+                });
+            $tr.fadeOut("fast");
+        });
+
+        // Delete a record
+        table.on('click', '.remove', function (e) {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+
+            $.get("/api/userapi/removeUserFromClassroom", { id: $("#id").val(), userId: data[0] })
+                .done(function () {
+                    $(".table").DataTable().ajax.reload(null, true);
+                });
+            $tr.fadeOut("fast");
+        });
+
+        //Like record
+        table.on('click', '.like', function () {
+            alert('You clicked on Like button');
+        });
+
+        $('.card .material-datatables label').addClass('form-group');
+    }
+
+
+
+    var app = new Vue({
+        el: '#classroom-container',
+        data: {
+            id: 0,
+            groups: {}
+        },
+        computed: {
+            groupsVisible: function () {
+                if (this.id != 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        methods: {
+            getGroups: function () {
+                var vm = this;
+                $.get("/api/groupsapi/listGroupsBySource").
+                    done(function (data) {
+                        //var doc = JSON.parse(data);
+                        vm.groups = data.groups;
+                    });
+            },
+            sendGroupData: function (groupset, groupid) {
+                var vm = this;
+                var data = {};
+                data.roomId = this.id;
+                data.groupset = groupset;
+                data.groupId = groupid;
+                $.post("/api/groupsapi/saveGroupToRoom", "roomId=" + data.roomId + "&" + "groupset=" + data.groupset + "&" + "groupId=" + data.groupId).
+                    done(function (data) {
+                        if (data == "success") {
+                            vm.getGroups();
+                        }
+                    });
+            },
+        }
+    });
+
+    app.id = @Model.Id;
+    app.getGroups();
+</script>

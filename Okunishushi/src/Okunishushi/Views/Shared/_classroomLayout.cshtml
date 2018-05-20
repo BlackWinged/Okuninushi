@@ -13,26 +13,39 @@
     <!--  Material Dashboard CSS    -->
     <link href="/assets/css/material-dashboard.css" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="~/lib/css/dropzone.css" rel="stylesheet" />
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
     <script src="/assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+    <script src="/lib/js/dropzone.js"></script>
+    <script src="https://unpkg.com/vue@2.3.2"></script>
+    @if (IsSectionDefined("extraCss"))
+    {
+        @RenderSection("extraCss")
+    }
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar" data-active-color="rose" data-background-color="black" data-image="../assets/img/sidebar-1.jpg">
+        <div class="sidebar" data-active-color="rose" data-background-color="black" data-image="/assets/img/sidebar-1.jpg">
             <!--
-            Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
-            Tip 2: you can also add an image using data-image tag
-            Tip 3: you can change the color of the sidebar with data-background-color="white | black"
-        -->
+                Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+                Tip 2: you can also add an image using data-image tag
+                Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+            -->
             <div class="logo">
                 <a href="@Url.Action("index")" class="simple-text">
                     Classrooms. TM, doh.
                 </a>
             </div>
             <div class="sidebar-wrapper">
+                @if (IsSectionDefined("customMenu"))
+                {
+                    @RenderSection("customMenu")
+                }
+                else
+                {
                 <ul class="nav">
                     <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")">
                         <a href="/classroom/">
@@ -51,43 +64,41 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "users" ? "active" : "")">
-                                    <a href="/classroom/users/">
-                                        All users
-                                    </a>
+                                    <a href="@Url.Action("users", "admin")">All users</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "roles" ? "active" : "")">
-                                    <a href="/classroom/roles/">
-                                        User roles
-                                    </a>
+                                    <a href="@Url.Action("roles", "admin")">User roles</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "documents" ? "active" : "")">
-                                    <a href="@Url.Action("documents")">
-                                        Documents
-                                    </a>
+                                    <a href="@Url.Action("documents", "admin", new { id = "" })">Documents</a>
                                 </li>
                                 <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "classrooms" ? "active" : "")">
-                                    <a href="@Url.Action("rooms")">
-                                        Rooms
-                                    </a>
+                                    <a href="@Url.Action("classrooms", "admin")">Rooms</a>
                                 </li>
-
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
+                                    <a href="@Url.Action("redoElastic", "homeroom")">Redo elastic</a>
+                                </li>
+                                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "redoElastic" ? "active" : "")">
+                                    <a href="@Url.Action("buildJobs", "homeroom")">Rebuild jobs</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
 
-                    <li>
-                        <a href="maps.html">
+                    <li @(ViewContext.RouteData.Values["Action"].ToString() == "ExternalAccounts" ? "active" : "")>
+                        <a href="@Url.Action("ExternalAccounts", "homeroom")">
                             <i class="material-icons">location_on</i>
-                            <p>Maps</p>
+                            <p>Accounts</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="notifications.html">
+                    <li @(ViewContext.RouteData.Values["Action"].ToString() == "Groups" ? "active" : "")>
+                        <a href="@Url.Action("Groups", "homeroom")">
                             <i class="material-icons text-gray">notifications</i>
-                            <p>Notifications</p>
+                            <p>Groups</p>
                         </a>
                     </li>
                 </ul>
+                }
             </div>
         </div>
         <div class="main-panel">
@@ -137,9 +148,9 @@
                                 </a>
                             </li>
                         </ul>
-                        <form class="navbar-form navbar-right" role="search">
+                        <form class="navbar-form navbar-right" role="search" action="@Url.Action("Search", "HomeRoom")">
                             <div class="form-group  is-empty">
-                                <input type="text" class="form-control" placeholder="Search">
+                                <input type="text" name="search" class="form-control" placeholder="Search">
                                 <span class="material-input"></span>
                             </div>
                             <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -229,8 +240,9 @@
 <script src="/assets/js/material-dashboard.js"></script>
 <script src="/assets/js/demo.js"></script>
 
-@*<script src="https://unpkg.com/vue@2.3.2"></script>*@
-@if (Context.Request.Path.Value == "/classroom" || Context.Request.Path.Value == "/classroom/")
+</html>
+
+@if (Context.Request.Path.Value == "/classroom" || Context.Request.Path.Value == "/classroom/" || Context.Request.Path.Value == "/classroom/homeroom")
 {
     <script type="text/javascript">
         $(document).ready(function () {
@@ -243,4 +255,3 @@
     </script>
 }
 
-</html>

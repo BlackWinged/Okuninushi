@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "About";
+    Layout = "_classroomLayout";
+}
+@model Nest.SearchResponse<Okunishushi.Models.Document>
+
+@section extraCss{
+    <link href="~/css/Search.css" rel="stylesheet" />
+}
+
+<div class="container-fluid accountgrid">
+    <h3>Accounts</h3>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-char">
+                <div class="card-content">
+                    <a href="javascript:void(0)" @@click="addFacebook" id="add-facebook"><h4 class="card-title">Add Bookface</h4></a>
+                    <a href="javascript:void(0)" @@click="logoutFacebook" id="logout-facebook"><h4 class="card-title">Logout Bookface</h4></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '249775002175257',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.9'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+        var docVue = new Vue({
+            el: '.accountgrid',
+            data: {
+                searchQuery: '',
+                docs: [],
+                currentDoc: {},
+                showContent: false,
+            },
+            watch: {
+                searchQuery: function (newId) {
+                    this.getDoc(newId);
+                },
+            },
+            methods: {
+                addFacebook: function () {
+                    FB.getLoginStatus(function (response) {
+                        if (response.status === 'connected') {
+                            console.log('Logged in.');
+                            console.log(JSON.stringify(response));
+                            response.authResponse.facebookUserId = response.authResponse.userID;
+                            $.post("/api/graphapi/saveAuthObject", response.authResponse, function () { }, "json");
+                        }
+                        else {
+                            FB.login(function (response) {
+                                if (response.authResponse) {
+                                    console.log(JSON.stringify(response));
+                                    response.authResponse.facebookUserId = response.authResponse.userID;
+                                    $.post("/api/graphapi/saveAuthObject", response.authResponse, function () { }, "json");
+                                }
+                            }, { scope: "user_managed_groups" });
+                        }
+                    });
+                },
+                logoutFacebook: function () {
+                    FB.getLoginStatus(function (response) {
+                        if (response.status === 'connected') {
+                            FB.logout();
+                        }
+                    });
+                }
+            }
+        });
+
+        //$("#add-facebook").click(function () {
+        //    FB.getLoginStatus(function (response) {
+        //        if (response.status === 'connected') {
+        //            console.log('Logged in.');
+        //            console.log(JSON.stringify(response));
+        //            response.authResponse.facebookUserId = response.authResponse.userID;
+        //            $.post("/api/graphapi/saveAuthObject", response.authResponse, function () { }, "json" );
+        //        }
+        //        else {
+        //            FB.login(function (response) { 
+        //                if (response.authResponse) { 
+        //                    console.log(JSON.stringify(response));
+        //                    response.authResponse.facebookUserId = response.authResponse.userID;
+        //                    $.post("/api/graphapi/saveAuthObject", JSON.stringify(response.authResponse), function () { },"json" );
+        //                }
+        //            }, { scope: "user_managed_groups" });
+        //        }
+        //    });
+
+        //});
+
+
+</script>

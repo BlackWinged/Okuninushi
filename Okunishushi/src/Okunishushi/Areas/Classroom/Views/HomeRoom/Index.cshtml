@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "_classroomLayout";
+}
+
+@model List<Okunishushi.Models.Classroom>
+
+<div class="container-fluid">
+    @for (int i = 0; i < Model.Count(); i += 3)
+    {
+        <div class="row">
+            @foreach (Okunishushi.Models.Classroom room in Model.Skip(i).Take(3))
+            {
+                <div class="col-md-4">
+                    <div class="card card-product">
+                        <div class="card-image" data-header-animation="true">
+                            <a href="#pablo">
+                                <img class="img" src="/assets/img/card-2.jpg">
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">
+                                <a href="#pablo">@room.ClassName</a>
+                            </h4>
+                            <div class="card-actions">
+                                <a href="@Url.Action("Index", "Room", new { id = room.Id })" class="btn btn-default" rel="tooltip" data-placement="bottom" title="Enter room">
+                                    <i class="material-icons">art_track</i>
+                                </a>
+                            </div>
+                            <div class="card-description">
+                                <p>@room.Description</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            @*<div class="price">
+                                <h4>$899/night</h4>
+                            </div>
+                            <div class="stats pull-right">
+                                <p class="category"><i class="material-icons">place</i> Barcelona, Spain</p>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+</div>

@@ -1,15 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Documents";
+    ViewData["Title"] = "Classrooms ";
     Layout = "_classroomLayout";
 }
-@model List<Okunishushi.Models.Document>
+@model List<Okunishushi.Models.Classroom>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="purple">
-                    <a href="/classroom/newuser" class="btn btn-info btn-fill pull-right">Add New User</a>
+                    <a href="@Url.Action("NewClassroom", "Admin")" class="btn btn-info btn-fill pull-right">Add New Room</a>
                     <h4 class="title">Simple Table</h4>
                     <p class="category">Here is a subtitle for this table</p>
                 </div>
@@ -17,14 +17,12 @@
                     <table class="table">
                         <thead class="text-primary">
                         <th>Name</th>
-                        <th>Google ID</th>
                         </thead>
                         <tbody>
-                            @foreach (Okunishushi.Models.Document doc in Model)
+                            @foreach (Okunishushi.Models.Classroom classroom in Model)
                             {
                                 <tr>
-                                    <td>@doc.FileName</td>
-                                    <td>@doc.GoogleId</td>
+                                    <td><a href="@Url.Action("NewClassroom" , "Admin", new { id = classroom.Id.ToString() })"> @classroom.ClassName</a></td>
                                 </tr>
                             }
                         </tbody>

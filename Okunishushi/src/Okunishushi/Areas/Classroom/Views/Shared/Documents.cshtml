@@ -1,0 +1,237 @@
+﻿@{
+    ViewData["Title"] = "Documents";
+    Layout = "_classroomLayout";
+}
+
+<div  class="container-fluid doctable">
+    <div v-if="canonicalDoc == ''" class="card">
+        <form action="/api/documentapi/uploaddocuments"
+              class="dropzone"
+              id="my-awesome-dropzone"></form>
+    </div>
+
+
+        <div class="col-md-6" v-if="canonicalDoc == ''">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Uploaded files:</h4>
+                    <form id="search">
+                        Search <input name="query" v-model="searchQuery">
+                    </form>
+                    <document-grid v-on:isclicked="getDocumentData" :docs="docs">
+                    </document-grid>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Edit document data:</h4>
+                    <input type="hidden" name="id" v-model="currentDoc.id" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">File name</label>
+                                <input type="text" class="form-control" name="filename" v-model="currentDoc.fileName">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Key name</label>
+                                <input type="text" class="form-control" name="keyname" v-model="currentDoc.keyName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Tags</label>
+                                <input type="text" class="form-control" name="tags" v-model="currentDoc.tags">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Image tags</label>
+                                <input type="text" class="form-control" name="tags" v-model="currentDoc.googleTags">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" @@click="saveDocData" class="btn btn-info btn-fill pull-right">Save</a>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6" v-if="showContent">
+            <div class="card">
+                <div class="card-header" data-background-color="purple">
+                    <h4 class="title">Simple Table</h4>
+                    <p class="category">Here is a subtitle for this table</p>
+                </div>
+                <div class="card-content table-responsive ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>About Me</label>
+                                <div class="form-group label-floating">
+                                    <label class="control-label"> Type up your description, pretty please?</label>
+                                    <textarea class="form-control" name="description" rows="25" v-model="currentDoc.content"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+<!-- component template -->
+<script type="text/x-template" id="document-template">
+    <table class="table">
+        <thead class="text-primary">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Tags
+                </th>
+                <th>
+                    Keyname
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="entry in docs" :data-row="entry['id']" @@click="getDocId">
+                <td>
+                    <a :data-row="entry['id']"> {{entry['fileName']}}</a>
+                </td>
+                <td>
+                    {{entry['tags']}}
+                </td>
+                <td>
+                    {{entry['keyName']}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script>
+    $(document).ready(function () {
+        Vue.component('document-grid', {
+            template: '#document-template',
+            props: {
+                data: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+                columns: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+                filterKey: String,
+                docs: {
+                    type: Array,
+                    default: function () { return [] }
+                },
+            },
+            methods: {
+                getDocId: function (e) {
+                    this.$emit("isclicked", e.target.dataset.row);
+                }
+            },
+
+        })
+
+        // bootstrap the demo
+        var docVue = new Vue({
+            el: '.doctable',
+            data: {
+                searchQuery: '',
+                docs: [],
+                currentDoc: {},
+                showContent: false,
+                canonicalDoc: 0
+            },
+            watch: {
+                searchQuery: function (newId) {
+                    this.getDoc(newId);
+                    },
+                canonicalDoc: function (newId) {
+                    if (newId != "") {
+                        this.getDoc(newId);
+                    }
+                    
+                },
+                docs: function () {
+                    if (this.canonicalDoc != "") {
+                        this.getDocumentData(this.canonicalDoc);
+                    }
+                }
+            },
+            methods: {
+                getDoc: function (newId) {
+                    var vm = this;
+                    $.get("/api/documentapi/docdata?id=" + newId).
+                        done(function (data) {
+                            //var doc = JSON.parse(data);
+                            var count = 0;
+                            vm.docs.forEach(function (obj) {
+                                if (obj.keyName === data.keyName) {
+                                    count = 1;
+                                }
+                            });
+                            if (!count) {
+                                vm.docs.push(data);
+                            }
+                        });
+                },
+                saveDocData: function (newId) {
+                    var vm = this;
+                    $.post("/api/documentapi/docdatasave", this.currentDoc).
+                        done(function (data) {
+                            //gašenje spinnera, eventually
+                        });
+                },
+                getDocumentData: function (e) {
+                    var vinstance = this;
+                    this.docs.forEach(function (obj) {
+                        if (obj.id === e) {
+                            vinstance.currentDoc = obj;
+                        }
+                    });
+                    if (this.currentDoc.content != null) {
+                        if (this.currentDoc.content.length > 3000) {
+                            this.showContent = true;
+                        } else {
+                            this.showContent = true;
+                        }
+                    }
+                    setTimeout(function () {
+                        $(".form-control").trigger("keydown")
+                    }, 50);
+
+                }
+            },
+        });
+        $("#my-awesome-dropzone").dropzone({ url: "/api/documentapi/uploaddocuments" });
+        docVue.canonicalDoc = "@Model";
+        var myDropzone = Dropzone.forElement("#my-awesome-dropzone");
+            myDropzone.on("success", function (file, message) {
+                docVue.searchQuery = message;
+            });
+    });
+
+</script>

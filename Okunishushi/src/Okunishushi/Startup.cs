@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Okunishushi.Filters;
+using System.Net.WebSockets;
+using Microsoft.AspNetCore.Http.Features;
+using Hangfire;
 
 namespace Okunishushi
 {
@@ -33,10 +37,28 @@ namespace Okunishushi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue;
+                x.MultipartHeadersLengthLimit = int.MaxValue;
+            });
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            services.AddDistributedMemoryCache();
+
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.CookieHttpOnly = true;
+            });
+
+            services.AddHangfire(x => x.UseSqlServerStorage(@Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +67,7 @@ namespace Okunishushi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseSession();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,20 +77,60 @@ namespace Okunishushi
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "classroute",
+                    template: "{area:exists}/{controller=homeroom}/{action=Index}/{id?}"
+                    );
                 routes.MapRoute(
                     name: "apiroute",
                     template: "api/{controller=Home}/{action=Index}/{id?}"
                     );
-                routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index"});
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //    name: "adminroute",
+                //    template: "classroom/{controller=Home}/{action=Index}/{id?}"
+                //    );
+                routes.MapRoute("inno", "innoHostel", new { controller = "Hotel", action = "index" });
             });
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
+
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize = 4 * 1024
+            };
+
+            //app.UseWebSockets();
+
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Path == "/classroom/docsocket")
+            //    {
+            //        if (context.WebSockets.IsWebSocketRequest)
+            //        {
+            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            //            await Echo(context, webSocket);
+            //        }
+            //        else
+            //        {
+            //            context.Response.StatusCode = 400;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
+
+            //});
         }
     }
+
 }

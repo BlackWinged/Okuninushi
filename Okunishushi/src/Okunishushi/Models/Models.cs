@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace Okunishushi.Models
 {
@@ -11,8 +16,12 @@ namespace Okunishushi.Models
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Document> Documents { get; set; }
-        public DbSet<ClassroomDocuments > ClassroomDocuments { get; set; }
+        public DbSet<ClassroomDocuments> ClassroomDocuments { get; set; }
         public DbSet<UserClassrooms> StudentClassrooms { get; set; }
+        public DbSet<FacebookAuth> FacebookAuthSet { get; set; }
+        public DbSet<FacebookGroup> FacebookGroups { get; set; }
+        public DbSet<FacebookGroupPost> FacebookGroupPosts { get; set; }
+        public DbSet<FacebookComment> FacebookComments { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -51,7 +60,6 @@ namespace Okunishushi.Models
                 .HasForeignKey(sc => sc.UserId);
 
 
-
             modelBuilder.Entity<ClassroomDocuments>()
                 .HasKey(doc => new { doc.ClassroomId, doc.DocumentId });
 
@@ -64,6 +72,8 @@ namespace Okunishushi.Models
                 .HasOne(cd => cd.Document)
                 .WithMany(d => d.ClassroomsDocuments)
                 .HasForeignKey(cd => cd.DocumentId);
+
+
         }
     }
     public class User
@@ -73,12 +83,13 @@ namespace Okunishushi.Models
         public string Email { get; set; }
         public string Schoolname { get; set; }
         public string Firstname { get; set; }
-        public string Lestname { get; set; }
+        public string Lastname { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
         public string Zipcode { get; set; }
         public string Description { get; set; }
+        public string Password { get; set; }
         public List<UserRole> UserRole { get; set; }
         public List<UserClassrooms> StudentClassrooms { get; set; }
     }
@@ -123,8 +134,11 @@ namespace Okunishushi.Models
         public int OwnerId { get; set; }
         public User Owner { get; set; }
 
+        public string ClassName { get; set; }
+        public string Tags { get; set; }
+        public string Description { get; set; }
+
         public List<UserClassrooms> StudentClassrooms { get; set; }
-        public List<UserClassrooms> TeacherClassrooms { get; set; }
         public List<ClassroomDocuments> ClassroomDocuments { get; set; }
     }
 
@@ -141,20 +155,161 @@ namespace Okunishushi.Models
 
     public class Document
     {
-        public int Id { get; set; }
-        public string GoogleId { get; set; }
+        public string Id { get; set; }
         public string FileName { get; set; }
+        public string ExternalUrl { get; set; }
+        public string ExternalId { get; set; }
+        public string ExternalParentId { get; set; }
+        public string KeyName { get; set; }
+        public string BucketName { get; set; }
+        public string Tags { get; set; }
+        public string GoogleTags { get; set; }
+        [Column(TypeName = "nvarchar(max)")]
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public TagBuilder LinkTags
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Tags))
+                {
+                    string[] tags = Tags.Split(',');
+                    List<TagBuilder> cleanedTags = new List<TagBuilder>();
+                    TagBuilder tagContainer = new TagBuilder("div");
+                    tagContainer.AddCssClass("bootstrap-tagsinput");
+
+                    foreach (string tag in tags)
+                    {
+                        TagBuilder container = new TagBuilder("span");
+                        container.AddCssClass("tag");
+                        container.AddCssClass("label");
+                        container.AddCssClass("label-info");
+                        TagBuilder cleanedTag = new TagBuilder("a");
+                        cleanedTag.TagRenderMode = TagRenderMode.Normal;
+                        cleanedTag.InnerHtml.Append(tag.Trim());
+                        cleanedTag.MergeAttribute("href", "/classroom/homeroom/search?tagsOnly=true&search=" + tag.Trim().ToLower());
+                        container.InnerHtml.AppendHtml(cleanedTag);
+                        cleanedTags.Add(container);
+                        tagContainer.InnerHtml.AppendHtml(container);
+                    }
+                    return tagContainer;
+
+                }
+                return null;
+            }
+        }
+
         public List<ClassroomDocuments> ClassroomsDocuments { get; set; }
     }
 
     public class ClassroomDocuments
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public int ClassroomId { get; set; }
         public Classroom Classroom { get; set; }
 
-        public int DocumentId { get; set; }
+        public string DocumentId { get; set; }
         public Document Document { get; set; }
     }
+
+    public class FacebookAuth
+    {
+        public int Id { get; set; }
+        public string accessToken { get; set; }
+        [JsonProperty(propertyName : "userID")]
+        public string facebookUserId { get; set; }
+        public int expiresIn { get; set; }
+        public string signedRequest { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+    }
+
+    public class FacebookGroup
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+
+        public int FacebookAuthId { get; set; }
+        public FacebookAuth parentAuth { get; set; }
+
+        public int ClassroomId { get; set; }
+        public Classroom attachedRoom { get; set; }
+
+        public List<FacebookGroupPost> posts { get; set; }
+    }
+
+    public class FacebookGroupPost
+    {
+        public string id { get; set; }
+        public DateTime updated_time { get; set; }
+        public string message { get; set; }
+
+        public int FacebookGroupId { get; set; }
+        public FacebookGroup parentGroup { get; set; }
+
+        [NotMapped]
+        public FacebookUser from { get; set; }
+
+        [JsonIgnore]
+        public string faceUserName {
+            get
+            {
+                return from.name;
+            }
+        }
+
+        [JsonIgnore]
+        public string faceUserId {
+            get
+            {
+                return from.id;
+            }
+        }
+
+        public string permalink_url { get; set; }
+        [JsonIgnore]
+        public List<FacebookComment> comments { get; set; }
+    }
+
+    public class FacebookComment
+    {
+        public string id { get; set; }
+        public string message { get; set; }
+
+        public int FacebookGroupPostId { get; set; }
+        public FacebookGroupPost parentPost {get; set;}
+
+        [NotMapped]
+        public FacebookUser from { get; set; }
+
+        [JsonIgnore]
+        public string faceUserName
+        {
+            get
+            {
+                return from.name;
+            }
+        }
+
+        [JsonIgnore]
+        public string faceUserId
+        {
+            get
+            {
+                return from.id;
+            }
+        }
+    }
+
+    public class FacebookUser
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+
+    }
+
 }

@@ -7,36 +7,18 @@ using Okunishushi.Models;
 using Microsoft.EntityFrameworkCore;
 using Google.Apis.Drive.v3;
 using Okunishushi.Connectors;
-
+using Okunishushi.Filters;
+using Microsoft.AspNetCore.Http;
+using Okunishushi.Helpers;
 
 namespace Okunishushi.Controllers
 {
-    public class ClassroomController : Controller
+    //[AuthFilter]
+    [Area("classroom")]
+    public class AdminController : Controller
     {
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
-        }
 
         public IActionResult Users()
         {
@@ -108,40 +90,46 @@ namespace Okunishushi.Controllers
             {
                 using (var db = new ClassroomContext())
                 {
-                    return View(db.Users.Single(r => r.Id == id));
+                    var user = db.Users.Include(u => u.UserRole).Single(r => r.Id == id);
+                    user.UserRole.ForEach(u => db.Entry(u).Reference(ur => ur.Role).Load());
+                    return View(user);
                 }
             }
             return View(new User());
         }
 
         [HttpPost]
-        public IActionResult NewUserSave(int? id)
+        public IActionResult NewUserSave(User user)
         {
-            User user = new User();
+            if (!SecurityHelper.isRegistrable(user.Username, user.Email, user.Password, Request.Form["confpassword"]) )
+            {
+                return Redirect("/classroom/admin/newuser");
+            }
             using (var db = new ClassroomContext())
             {
-                if (id != null)
-                {
-                    user = db.Users.Single(r => r.Id == id);
-                }
-                else
+                if (user.Id == 0)
                 {
                     db.Users.Add(user);
+                } else
+                {
+                    db.Users.Update(user);
                 }
-                user.Username = Request.Form["username"];
-                user.Email = Request.Form["email"];
                 db.SaveChanges();
                 var roles = db.Roles;
-                foreach (string role in Request.Form["roles"].ToString().Split(','))
-                {
-                    roles.Where(r => r.Slug == role);
-                }
-                List<Role> resultRoles = roles.ToList();
+
+                List<string> roleCodes = new List<string>();
+                roleCodes.AddRange(Request.Form["roles"].ToString().Split(',').ToList());
+
+                List<Role> resultRoles = roles.Where(r => roleCodes.Where(x => x.ToLower() == r.Slug.ToLower()).Count() > 0).ToList();
+                List<UserRole> existingRoles = db.UserRoles.Where(ur => ur.UserId == user.Id).ToList();
+                db.UserRoles.RemoveRange(existingRoles);
+
                 foreach (Role role in resultRoles)
                 {
                     UserRole userRole = new UserRole();
                     userRole.User = user;
                     userRole.Role = role;
+
                     db.UserRoles.Add(userRole);
                 }
                 db.SaveChanges();
@@ -149,10 +137,10 @@ namespace Okunishushi.Controllers
             return Redirect("users");
         }
 
-        public IActionResult Documents()
+        public IActionResult Documents(string id)
         {
-            List<Document> files = GoogleDriveConnector.listFiles();
-            return View(files);
+
+            return View("Documents", id);
         }
 
         public IActionResult uploadFiles()
@@ -176,9 +164,45 @@ namespace Okunishushi.Controllers
             return null;
         }
 
-        public IActionResult NewClassroom()
+        public IActionResult ClassRooms()
         {
-            return View();
+            using (var db = new ClassroomContext())
+            {
+                return View(db.Classrooms.ToList());
+            }
         }
+
+        public IActionResult NewClassroom(int id)
+        {
+            {
+                using (var db = new ClassroomContext())
+                {
+                    if (id != 0)
+                    {
+                        var classroom = db.Classrooms.Single(r => r.Id == id);
+                        return View(classroom);
+
+                    }
+                }
+            }
+            return View(new Classroom());
+        }
+
+        public IActionResult SaveNewClassroom(Classroom newRoom)
+        {
+            var db = new ClassroomContext();
+            newRoom.OwnerId = SecurityHelper.currentUserId(HttpContext.Session);
+            if (newRoom.Id == 0)
+            {
+                db.Classrooms.Add(newRoom);
+            }
+            else
+            {
+                db.Classrooms.Update(newRoom);
+            }
+            db.SaveChanges();
+            return Redirect(Url.Action("NewClassroom", "Admin") + "/" + newRoom.Id);
+        }
+
     }
 }
